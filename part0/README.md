@@ -12,4 +12,4 @@ This chapter represents the fundimentals of web development.
 | 0.3    | [HTML forms](https://developer.mozilla.org/en-US/docs/Learn/Forms/Your_first_form)
 | 0.4    | [New note diagram](./0.4.md)
 | 0.5    | [Single page app](./0.5.md)
-| 0.6    | [New note in Single page app diagram](./0.5.md)
+| 0.6    | [New note in Single page app diagram](./0.6.md)
