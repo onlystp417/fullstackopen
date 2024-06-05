@@ -1,3 +1,4 @@
+import StatisticLine from "./StatisticLine";
 
 export default function Statistics({ good, neutral, bad }) {
   const GOOD_SCORE = 1;
@@ -7,12 +8,12 @@ export default function Statistics({ good, neutral, bad }) {
     (
       <>
         <h3>statistics</h3>
-        <p>good { good }</p>
-        <p>neutral { neutral }</p>
-        <p>bad { bad }</p>
-        <p>all { getAll() }</p>
-        <p>average { getAverage() }</p>
-        <p>positive { getPositive() } %</p>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="all" value={getAll()} />
+        <StatisticLine text="average" value={getAverage()} />
+        <StatisticLine text="positive" value={getPositive()} />
       </>
     ) :
     <p>No feedback given</p>
