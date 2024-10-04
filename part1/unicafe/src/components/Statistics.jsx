@@ -4,16 +4,21 @@ export default function Statistics({ good, neutral, bad }) {
   const GOOD_SCORE = 1;
   const NEUTRAL_SCORE = 0;
   const BAD_SCORE = -1;
+
   const template = getAll() ?
     (
       <>
         <h3>statistics</h3>
-        <StatisticLine text="good" value={good} />
-        <StatisticLine text="neutral" value={neutral} />
-        <StatisticLine text="bad" value={bad} />
-        <StatisticLine text="all" value={getAll()} />
-        <StatisticLine text="average" value={getAverage()} />
-        <StatisticLine text="positive" value={getPositive()} />
+        <table>
+          <tbody>
+            <StatisticLine text="good" value={good} />
+            <StatisticLine text="neutral" value={neutral} />
+            <StatisticLine text="bad" value={bad} />
+            <StatisticLine text="all" value={getAll()} />
+            <StatisticLine text="average" value={getAverage()} />
+            <StatisticLine text="positive" value={getPositive()} />  
+          </tbody>
+        </table>
       </>
     ) :
     <p>No feedback given</p>

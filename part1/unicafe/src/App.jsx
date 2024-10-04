@@ -8,20 +8,18 @@ export default function App() {
   const [bad, setBad] = useState(0)
 
   function setToComment(comment)  {
-    return () => {
-      switch(comment) {
-        case 'good':
-          setGood(good + 1)
-          break
-        case 'neutral':
-          setNeutral(neutral + 1)
-          break
-        case 'bad':
-          setBad(bad + 1)
-          break
-        default:
-          return
-      }
+    switch(comment) {
+      case 'good':
+        setGood(good + 1)
+        break
+      case 'neutral':
+        setNeutral(neutral + 1)
+        break
+      case 'bad':
+        setBad(bad + 1)
+        break
+      default:
+        return
     }
   }
 
