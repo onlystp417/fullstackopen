@@ -1,11 +1,25 @@
 # fullstackopen
 
 ## Info
-This project is for Full Stack Open course hold by the University of Helsinki's online program.
+This project is for [Full Stack Open course](https://fullstackopen.com/en/) hold by the University of Helsinki's online program.
 
-## Table of Content
-|Course|Content|Exercises|
-|---|---|---|
-|Fundamentals of Web apps|1. General info<br>2. Fundamentals of Web apps|[Part 0](./part0/README.md)|
-|Introduction to React|1. Introduction to React<br>2. JavaScript<br>3. Component stat, event handling<br>4. A more complex state debugging React apps|[Part 1](./part1/README.md)|
+## Course Content
 
+### Part 0 - Fundamentals of Web apps
+View [Exercise](./part0/README.md)
+1. General info
+2. Fundamentals of Web apps
+
+### Part 1 -  Introduction to React
+View [Exercise](./part1/README.md)
+1. Introduction to React
+2. JavaScript
+3. Component stat, event handling
+4. A more complex state debugging React apps
+
+### Part 2 - Communicating with Server
+1. Rendering a collection, modules
+2. Forms
+3. Getting data from server
+4. Altering data in server
+5. Adding styles to React app
