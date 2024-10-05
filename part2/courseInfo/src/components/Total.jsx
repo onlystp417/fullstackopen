@@ -3,10 +3,10 @@ import { useState } from 'react'
 function Total({ content }) {
 
   function sumUpExcersixes() {
-    let sumValue = 0;
-    for(let i=0; i<content.length; i++) {
-      sumValue += content[i].exercises
-    }
+    let sumValue = content.reduce(
+      (accu, curr) => accu + curr.exercises
+    , 0)
+    
     return sumValue
   }
 
