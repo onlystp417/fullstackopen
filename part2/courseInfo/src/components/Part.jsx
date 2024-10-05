@@ -5,7 +5,7 @@ function Part({ part }) {
   return (
     <li>
       <span>{ part.name }</span>
-      <span>{ part.exercises }</span>
+      <span>  { part.exercises }</span>
     </li>
   )
 }
