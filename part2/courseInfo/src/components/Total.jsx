@@ -6,12 +6,12 @@ function Total({ content }) {
     let sumValue = content.reduce(
       (accu, curr) => accu + curr.exercises
     , 0)
-    
+
     return sumValue
   }
 
   return (
-    <p>Total of {  sumUpExcersixes() } exercises.</p>
+    <p><b>Total of {  sumUpExcersixes() } exercises.</b></p>
   )
 }
 
