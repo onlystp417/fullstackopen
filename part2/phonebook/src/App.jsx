@@ -6,6 +6,7 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [keyword, setKeyword] = useState('')
 
   function handleAdd(e) {
     let nameExist = false
@@ -39,9 +40,22 @@ const App = () => {
     setNewNumber('')
   }
 
+  function shownList() {
+    if(keyword === '')
+      return persons
+    return persons.filter(person => person.name.toLowerCase().includes(keyword))
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <form>
+        <div>
+          Filter shown with 
+          <input value={keyword} onChange={event => setKeyword(event.target.value)} />
+        </div>
+      </form>
+      <h2>Add a new</h2>
       <form>
         <div>
           name: <input value={newName} onChange={event => setNewName(event.target.value)}/>
@@ -55,7 +69,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map(person => (
+        {shownList().map(person => (
           <li key={ person.id }>
             <span>{person.name}</span>
             <span> / </span>
