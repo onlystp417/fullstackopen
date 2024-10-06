@@ -7,14 +7,26 @@ const App = () => {
   const [newName, setNewName] = useState('')
 
   function handleAdd(e) {
+    let nameExist = false
     e.preventDefault()
-    console.log(e)
+
+    // check if newName is empty string
     if(newName === '')
       return
+
+    // check if name is exist
+    nameExist = persons.findIndex(person => person.name === newName) >= 0 
+    if(nameExist) {
+      alert(`${ newName } is already added to phonebook.`)
+      return
+    }
+
+    // add name to the phonebook
     setPersons(persons.concat({
-      name: newName,
+      name: newName.trim(),
       id: persons.length
     }))
+    setNewName('')
   }
 
   return (
