@@ -22,13 +22,18 @@
     },
     {
       "id": "4",
-      "name": "Ava Manson",
-      "number": "890-433-1212"
+      "name": "Ann Lee",
+      "number": "900-833-1212"
     },
     {
       "id": "5",
-      "name": "Jean Kay",
-      "number": "900-123-4567"
+      "name": "Jin Hsieh",
+      "number": "602-293-7971"
+    },
+    {
+      "id": "6",
+      "name": "Ava Hsieh",
+      "number": "602-739-7176"
     }
   ]
 }

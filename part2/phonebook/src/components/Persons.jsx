@@ -8,10 +8,12 @@ function Persons({ persons, keyword }) {
   }
 
   return (
+    // <pre>{ persons }</pre>
     <ul>
-      {shownList().map(person => (
+      {shownList().map((person) => (
         <li key={ person.id }>
-          <span>{person.name}</span>
+          {/* {JSON.stringify(person)} */}
+          <span>{person?.name}</span>
           <span> / </span>
           <span>{person.number}</span>
         </li>

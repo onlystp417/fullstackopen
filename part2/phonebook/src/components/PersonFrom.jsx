@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import personService from '../service/person'
 
 function PersonFrom({ persons, newName, newNumber, onSetNewName, onSetNewNumber, onSetPersons }) {
   function handleAdd(e) {
@@ -25,16 +25,11 @@ function PersonFrom({ persons, newName, newNumber, onSetNewName, onSetNewNumber,
     }
 
     // add name to the phonebook
-    axios.post('http://localhost:3001/persons', {
+    personService.create({
       id: String(persons.length),
       name: newName.trim(),
       number: newNumber.trim()
-    }).then(res => {
-        console.log(res)
-        onSetPersons(persons.concat(res.data))
-      })
-      .catch(err => {
-        throw Error(err.message)})
+    }).then(res => onSetPersons(persons.concat(res)))
 
     onSetNewName('')
     onSetNewNumber('')

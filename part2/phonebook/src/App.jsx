@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import PersonFrom from './components/PersonFrom'
 import Filter from './components/Filter'
-import axios from 'axios'
+import personService from './service/person'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,13 +11,7 @@ const App = () => {
   const [keyword, setKeyword] = useState('')
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-      .then(res => {
-        // console.log(res)
-        setPersons(res.data)
-      })
-      .catch(err => {
-        throw Error(err.message)})
+    personService.getAll().then(res => setPersons(res))
   }, [keyword])
   
 
