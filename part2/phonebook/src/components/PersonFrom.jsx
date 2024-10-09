@@ -3,8 +3,7 @@ import personService from '../service/person'
 
 function PersonFrom({ persons, newName, newNumber, onSetNewName, onSetNewNumber, onSetPersons }) {
   function handleAdd(e) {
-    let nameExist = false
-    let numberExist = false
+    
     e.preventDefault()
 
     // check if newName is empty string
@@ -14,15 +13,7 @@ function PersonFrom({ persons, newName, newNumber, onSetNewName, onSetNewNumber,
     }
 
     // check if name is exist
-    nameExist = persons.findIndex(person => person.name === newName) >= 0 
-    numberExist = persons.findIndex(person => person.number === newNumber) >= 0 
-    if(nameExist) {
-      alert(`${ newName } is already added to phonebook.`)
-      return
-    } else if (numberExist) {
-      alert(`${ newNumber } is been taken.`)
-      return
-    }
+    if(checkDuplicated()) return
 
     // add name to the phonebook
     personService.create({
@@ -33,6 +24,37 @@ function PersonFrom({ persons, newName, newNumber, onSetNewName, onSetNewNumber,
 
     onSetNewName('')
     onSetNewNumber('')
+  }
+
+  function handleUpdate(uptPe) {
+    const msg = `${uptPe.name} is already added to phonebook, replace the old numberwith a new one?`
+    if(window.confirm(msg)) {
+      personService.update(uptPe.id, uptPe)
+        .then(res => onSetPersons(persons.map(per => per.id === uptPe.id ? res : per)))
+    }
+  }
+
+  function checkDuplicated() {
+    let nameIndex = -1
+    let numberIndex = -1
+
+    nameIndex = persons.findIndex(person => person.name === newName)
+    numberIndex = persons.findIndex(person => person.number === newNumber)
+    
+    if (numberIndex >= 0 && nameIndex !== numberIndex) {
+      alert(`${ newNumber } is been taken.`)
+      return true
+    } else if(nameIndex >= 0 && nameIndex !== numberIndex) {
+      const existPerson = persons.find(person => person.name === newName)
+      handleUpdate({
+        ...existPerson,
+        number: newNumber.trim()
+      })
+      return true
+    } else if(nameIndex >= 0 && nameIndex === numberIndex){
+      alert(`${ newName } is already added to phonebook.`)
+      return true
+    }
   }
 
   return (
