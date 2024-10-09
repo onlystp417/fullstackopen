@@ -18,4 +18,10 @@ function create(newObj) {
       alert(err.message)})
 }
 
-export default { getAll, create }
+function remove(id) {
+  const promise = axios.delete(`${baseUrl}/${id}`)
+  return promise
+    .then(res => res.data)
+}
+
+export default { getAll, create, remove }

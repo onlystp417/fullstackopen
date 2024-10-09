@@ -29,7 +29,7 @@ const App = () => {
         onSetNewNumber={setNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} keyword={keyword}/>
+      <Persons persons={persons} onSetPersons={setPersons} keyword={keyword}/>
     </div>
   )
 }
