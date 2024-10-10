@@ -1,7 +1,14 @@
 import React from 'react'
 import personService from '../service/person'
 
-function PersonFrom({ persons, newName, newNumber, onSetNewName, onSetNewNumber, onSetPersons }) {
+function PersonFrom({
+  persons,
+  newName,
+  newNumber,
+  onSetNewName,
+  onSetNewNumber,
+  onSetPersons,
+  onSetAlerMessage }) {
   function handleAdd(e) {
     
     e.preventDefault()
@@ -21,6 +28,10 @@ function PersonFrom({ persons, newName, newNumber, onSetNewName, onSetNewNumber,
       name: newName.trim(),
       number: newNumber.trim()
     }).then(res => onSetPersons(persons.concat(res)))
+      .then(() => {
+        onSetAlerMessage(`Added ${newName.trim()}`)
+        resetAlert()
+      })
 
     onSetNewName('')
     onSetNewNumber('')
@@ -31,6 +42,10 @@ function PersonFrom({ persons, newName, newNumber, onSetNewName, onSetNewNumber,
     if(window.confirm(msg)) {
       personService.update(uptPe.id, uptPe)
         .then(res => onSetPersons(persons.map(per => per.id === uptPe.id ? res : per)))
+        .then(() => {
+          onSetAlerMessage(`Chanhed number to ${uptPe.number}`)
+          resetAlert()
+        })
     }
   }
 
@@ -55,6 +70,12 @@ function PersonFrom({ persons, newName, newNumber, onSetNewName, onSetNewNumber,
       alert(`${ newName } is already added to phonebook.`)
       return true
     }
+  }
+
+  function resetAlert() {
+    setTimeout(() => {
+      onSetAlerMessage('')
+    }, 3000)
   }
 
   return (

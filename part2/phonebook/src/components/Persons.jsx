@@ -19,7 +19,7 @@ function Persons({ persons, onSetPersons, keyword }) {
     // <pre>{ persons }</pre>
     <ul>
       {shownList().map((person) => (
-        <li key={ person.id }>
+        <li key={ person.name }>
           {/* {JSON.stringify(person)} */}
           <span>{person?.name}</span>
           <span> / </span>
