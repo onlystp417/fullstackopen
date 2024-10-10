@@ -29,7 +29,9 @@ function PersonFrom({
       number: newNumber.trim()
     }).then(res => onSetPersons(persons.concat(res)))
       .then(() => {
-        onSetAlerMessage(`Added ${newName.trim()}`)
+        onSetAlerMessage({
+          type: 'success',
+          msg: `Added ${newName.trim()}`})
         resetAlert()
       })
 
@@ -43,8 +45,21 @@ function PersonFrom({
       personService.update(uptPe.id, uptPe)
         .then(res => onSetPersons(persons.map(per => per.id === uptPe.id ? res : per)))
         .then(() => {
-          onSetAlerMessage(`Chanhed number to ${uptPe.number}`)
+          onSetAlerMessage({
+            type: 'success',
+            msg: `Chanhed number to ${uptPe.number}`
+          })
           resetAlert()
+        })
+        .catch(err => {
+          // console.log(err.status === 404);
+          if(err.status === 404) {
+            onSetAlerMessage({
+              type: 'error',
+              msg: `Information of ${uptPe.name} has already been removed from server.`
+            })
+            resetAlert()
+          }
         })
     }
   }
@@ -74,7 +89,7 @@ function PersonFrom({
 
   function resetAlert() {
     setTimeout(() => {
-      onSetAlerMessage('')
+      onSetAlerMessage({ type: '', msg: '' })
     }, 3000)
   }
 

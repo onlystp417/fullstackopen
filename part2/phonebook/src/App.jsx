@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [keyword, setKeyword] = useState('')
-  const [alertMessage, setAlertMessage] = useState('')
+  const [alert, setAlert] = useState({ type: '', msg: '' })
 
   useEffect(() => {
     personService.getAll().then(res => setPersons(res))
@@ -19,7 +19,8 @@ const App = () => {
 
   return (
     <div>
-      <Alert alertMessage={alertMessage}/>
+      {/* { alertMessage ? <Alert alertMessage={alertMessage}/> : null } */}
+      <Alert alert={alert} /> 
       <h2>Phonebook</h2>
       <Filter keyowrd={keyword} onSetKeyword={setKeyword} />
       <h2>Add a new</h2>
@@ -30,7 +31,7 @@ const App = () => {
         onSetPersons={setPersons}
         onSetNewName={setNewName}
         onSetNewNumber={setNewNumber}
-        onSetAlerMessage={setAlertMessage}
+        onSetAlerMessage={setAlert}
       />
       <h2>Numbers</h2>
       <Persons persons={persons} onSetPersons={setPersons} keyword={keyword}/>

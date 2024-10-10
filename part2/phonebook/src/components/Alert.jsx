@@ -1,18 +1,18 @@
 import React from 'react'
 
-function Alert({ alertMessage }) {
+function Alert({ alert }) {
   const alertStyle = {
     width: '100%',
-    border: '2px solid green',
+    border: alert.type === 'success' ? '2px solid green' : '2px solid red',
     borderRadius: '5px',
-    color: 'green',
+    color: alert.type === 'success' ? 'green' : 'red',
     padding: '10px 20px',
     fontSize: '1.5rem',
-    display: alertMessage ? 'block' : 'none'
+    display: alert.type ? 'block' : 'none'
   }
 
   return (
-    <div style={alertStyle}>{ alertMessage } </div>
+    <div style={alertStyle}>{ alert.msg } </div>
   )
 }
 
