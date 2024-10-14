@@ -1,4 +1,5 @@
 import React from 'react'
+import Weather from './Weather'
 
 function Detail({ country }) {
   const flagStyle = {
@@ -18,6 +19,7 @@ function Detail({ country }) {
             { Object.values(country.languages).map(lang => <li key={lang}>{ lang }</li>) }
           </ul>
           <p style={flagStyle}>{ country.flag } </p>
+          <Weather country={country} />
         </div>
         : null
       }

@@ -34,7 +34,7 @@ function App() {
     return sentence ?
       <p>{ sentence }</p>
       : countries.length === 1 ?
-        <Detail country={countries[0]} />
+        <Detail country={{ ...countries[0], show: true }} />
         : <List countries={countries} setCountries={setCountries} />
   }
 
