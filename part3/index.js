@@ -23,5 +23,16 @@ app.get('/api/info', (req, res) => {
   `)
 })
 
+app.get('/api/persons/:id', (req, res) => {
+  const id = req.params.id
+  const person = phonebook.find(person => person.id === id)
+  
+  if(!person) {
+    return res.status(404).send('No person was found')
+  }
+
+  res.status(200).json(person)
+})
+
 app.listen(PORT)
 console.log(`Server listen to port ${PORT}`)
