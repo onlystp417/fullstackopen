@@ -34,5 +34,16 @@ app.get('/api/persons/:id', (req, res) => {
   res.status(200).json(person)
 })
 
+app.delete('/api/persons/:id', (req, res) => {
+  const id = req.params.id
+  const isPersonExist = phonebook.findIndex(person => person.id === id)
+
+  if(isPersonExist < 0) return res.status(404).send('Person is not in the phonebook')
+
+  phonebook = phonebook.filter(person => person.id !== id)
+
+  res.status(204).end()
+})
+
 app.listen(PORT)
 console.log(`Server listen to port ${PORT}`)
