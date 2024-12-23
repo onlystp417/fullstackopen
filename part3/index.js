@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const PORT = 8001
 
+const { generateId } = require('./utils')
+
 let phonebook = require('./db.json')
 
 app.use(express.json())
@@ -43,6 +45,27 @@ app.delete('/api/persons/:id', (req, res) => {
   phonebook = phonebook.filter(person => person.id !== id)
 
   res.status(204).end()
+})
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body
+
+  console.log(body)
+
+  if(!(body.name && body.number)) {
+    return res.status(400).json({ 
+      error: 'Content missing' 
+    })
+  }
+
+  const person = {
+    id: generateId(phonebook),
+    ...body
+  }
+
+  phonebook = phonebook.concat(person)
+
+  res.status(201).json(person)
 })
 
 app.listen(PORT)
