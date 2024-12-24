@@ -9,5 +9,5 @@ This [section](https://fullstackopen.com/en/part2) covers how to interact with a
 | -------- | ------- |
 | 2.1 - 2.5  |  [Course Information](./courseInfo/) |
 | 2.6 - 2.17 |  [Phonebbok](./phonebook/)            |
-| 1.12 - 1.14|  [Data for Countries](./countries/)           |
+| 2.18 - 2.20|  [Data for Countries](./countries/)           |
 
