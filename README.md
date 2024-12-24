@@ -18,6 +18,7 @@ View [Exercise](./part1/README.md)
 4. A more complex state debugging React apps
 
 ### Part 2 - Communicating with Server
+View [Exercise](./part2/README.md)
 1. Rendering a collection, modules
 2. Forms
 3. Getting data from server
