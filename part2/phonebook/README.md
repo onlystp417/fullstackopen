@@ -1,13 +1,8 @@
-# Communicating with Server
+# React + Vite
 
-## Info
-This [section](https://fullstackopen.com/en/part2) covers how to interact with a server in a React app. It includes rendering data collections, handling forms, data communicating with the server, using json-server to do data mocking, fetching third open source data from Open Weather, and styling the React app to improve its appearance.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Exercises:
+Currently, two official plugins are available:
 
-| Excercises | Topic |
-| -------- | ------- |
-| 2.1 - 2.5  |  [Course Information](./courseInfo/) |
-| 2.6 - 2.17 |  [Phonebbok](./phonebook/)            |
-| 1.12 - 1.14|  [Data for Countries](./countries/)           |
-
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
