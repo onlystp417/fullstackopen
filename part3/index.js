@@ -9,10 +9,11 @@ let phonebook = require('./db.json')
 
 app.use(express.json())
 // app.use(morgan('tiny'))
-// app.use(morgan(':method :url :status'))
-app.use(morgan('tiny', {
-  skip: function (req, res) { return res.statusCode < 400 }
-}))
+morgan.token('body', (req, res) => JSON.stringify(req.body))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+// app.use(morgan('tiny', {
+//   skip: function (req, res) { return res.statusCode < 400 }
+// }))
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello Phonebook</h1>')
