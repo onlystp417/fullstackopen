@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const PORT = 8001
+const PORT = process.env.PORT || 8001 // Use process.env.PORT for flexibility
 const morgan = require('morgan')
 
 const { generateId } = require('./utils')
@@ -45,9 +45,9 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
   const id = req.params.id
-  const isPersonExist = phonebook.findIndex(person => person.id === id)
+  const isPersonExist = phonebook.some(person => person.id === id)
 
-  if(isPersonExist < 0) return res.status(404).send('Person is not in the phonebook')
+  if(isPersonExist) return res.status(404).send('Person is not in the phonebook')
 
   phonebook = phonebook.filter(person => person.id !== id)
 
@@ -62,7 +62,7 @@ app.post('/api/persons', (req, res) => {
     return res.status(400).json({ 
       error: 'Content missing' 
     })
-  } else if(nameIsDuplicated > -1) {
+  } else if(nameIsDuplicated) {
     return res.status(400).json({ 
       error: 'Name must be unique' 
     })
