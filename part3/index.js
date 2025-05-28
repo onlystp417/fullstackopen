@@ -8,6 +8,7 @@ const { generateId } = require('./utils')
 
 let phonebook = require('./db.json')
 
+app.use(express.static('dist'))
 app.use(cors())
 app.use(express.json())
 // app.use(morgan('tiny'))

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:8001/api/persons'
+const baseUrl = '/api/persons'
 
 function getAll() {
   const promise = axios.get(baseUrl)
