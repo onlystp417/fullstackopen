@@ -2,11 +2,13 @@ const express = require('express')
 const app = express()
 const PORT = process.env.PORT || 8001 // Use process.env.PORT for flexibility
 const morgan = require('morgan')
+const cors = require('cors')
 
 const { generateId } = require('./utils')
 
 let phonebook = require('./db.json')
 
+app.use(cors())
 app.use(express.json())
 // app.use(morgan('tiny'))
 morgan.token('body', (req, res) => JSON.stringify(req.body))

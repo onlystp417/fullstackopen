@@ -18,7 +18,7 @@ function Persons({ persons, onSetPersons, keyword }) {
   return (
     // <pre>{ persons }</pre>
     <ul>
-      {shownList().map((person) => (
+      {Array.isArray(persons) ? shownList().map((person) => (
         <li key={ person.name }>
           {/* {JSON.stringify(person)} */}
           <span>{person?.name}</span>
@@ -26,7 +26,7 @@ function Persons({ persons, onSetPersons, keyword }) {
           <span>{person.number} </span>
           <button onClick={() => handleDelete(person.id, person.name)}>Delete</button>
         </li>
-      ))}
+      )) : <li>Loading...</li>}
     </ul>
   )
 }

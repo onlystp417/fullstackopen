@@ -4,6 +4,26 @@
       "name": "Arto Hellas",
       "number": "789-123-7654",
       "id": "0"
+    },
+    {
+      "id": "1",
+      "name": "Jin Hsieh",
+      "number": "623-298-7971"
+    },
+    {
+      "id": "2",
+      "name": "GB Lin",
+      "number": "602-237-0044"
+    },
+    {
+      "id": "3",
+      "name": "Zen Lee",
+      "number": "480-111-1314"
+    },
+    {
+      "id": "4",
+      "name": "Karl Wu",
+      "number": "480-297-0609"
     }
   ]
 }
