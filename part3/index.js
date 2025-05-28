@@ -38,7 +38,6 @@ app.get('/api/info', (req, res) => {
 app.get('/api/persons/:id', (req, res) => {
   const id = req.params.id
   const person = phonebook.find(person => person.id === id)
-  
   if(!person) {
     return res.status(404).send('No person was found')
   }
@@ -81,7 +80,5 @@ app.post('/api/persons', (req, res) => {
   res.status(201).json(person)
 })
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on http://0.0.0.0:${PORT}`)
-})
+app.listen(PORT)
 console.log(`Server listen to port ${PORT}`)
