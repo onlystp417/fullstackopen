@@ -81,5 +81,7 @@ app.post('/api/persons', (req, res) => {
   res.status(201).json(person)
 })
 
-app.listen(PORT)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on http://0.0.0.0:${PORT}`)
+})
 console.log(`Server listen to port ${PORT}`)
