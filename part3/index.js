@@ -58,7 +58,7 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
-  const nameIsDuplicated = phonebook.findIndex(person => person.name === body.name)
+  const nameIsDuplicated = phonebook.some(person => person.name === body.name)
 
   if(!(body.name && body.number)) {
     return res.status(400).json({ 
