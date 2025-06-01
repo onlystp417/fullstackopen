@@ -1,0 +1,16 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",  // 透過 Node 執行
+      "request": "launch",
+      "name": "Launch Program",  // 設定檔名稱，之後才可以在 VSCode debugger 找到
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/part3/index.js", // 直接執行檔案，路徑要對
+      "console": "integratedTerminal",
+    }
+  ]
+}
