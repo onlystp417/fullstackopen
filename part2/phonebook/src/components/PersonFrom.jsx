@@ -24,7 +24,6 @@ function PersonFrom({
 
     // add name to the phonebook
     personService.create({
-      id: String(persons.length),
       name: newName.trim(),
       number: newNumber.trim()
     }).then(res => onSetPersons(persons.concat(res)))

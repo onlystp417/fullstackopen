@@ -57,26 +57,24 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
-  const nameIsDuplicated = phonebook.some(person => person.name === body.name)
+  const phone = new Phone({ ...body })
+  // const nameIsDuplicated = phonebook.some(person => person.name === body.name)
 
   if(!(body.name && body.number)) {
     return res.status(400).json({ 
       error: 'Content missing' 
     })
-  } else if(nameIsDuplicated) {
-    return res.status(400).json({ 
-      error: 'Name must be unique' 
-    })
   }
+  // else if(nameIsDuplicated) {
+  //   return res.status(400).json({ 
+  //     error: 'Name must be unique' 
+  //   })
+  // }
 
-  const person = {
-    id: generateId(phonebook),
-    ...body
-  }
+  phone.save().then(savedPhone => {
+    res.status(201).json(savedPhone)
+  })
 
-  phonebook = phonebook.concat(person)
-
-  res.status(201).json(person)
 })
 
 app.listen(PORT)
