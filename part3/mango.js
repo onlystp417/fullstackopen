@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Phone = require('./models/phone')
+
 require('dotenv').config()
 
 const uri = process.env.MONGODB_URI
