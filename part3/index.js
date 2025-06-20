@@ -6,19 +6,28 @@ const cors = require('cors')
 const mongoose = require('./mongo')
 const Phone = require('./models/phone')
 
+// custom middleware
+const errorMiddleware = (error, request, response, next) => {
+  console.log(error.message);
+  next(error)
+}
+
 app.use(express.static('dist'))
 app.use(cors())
 app.use(express.json())
 
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use(errorMiddleware) // use custom middleware in the last line
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello Phonebook</h1>')
 })
 
 app.get('/api/persons', (req, res) => {
-  Phone.find({}).then(phones => res.status(200).json(phones))
+  Phone.find({})
+    .then(phones => res.status(200).json(phones))
+    .catch(error => next(error))
 })
 
 app.get('/api/info', (req, res) => {
@@ -34,29 +43,17 @@ app.get('/api/info', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  Phone.findById({ id: req.params.id }).then(phone => {
-    if(!phone) {
-      return res.status(404).send('No person was found')
-    }
-    res.status(200).json(phone)
-  })
+  Phone.findById({ id: req.params.id })
+    .then(phone => res.status(200).json(phone))
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res) => {
   const id = req.params.id
-  // const isPersonExist = phonebook.some(person => person.id === id)
 
   Phone.findByIdAndDelete(id)
-    .then(result => {
-      res.status(204).end()
-    })
-
-
-  // if(isPersonExist) return res.status(404).send('Person is not in the phonebook')
-
-  // phonebook = phonebook.filter(person => person.id !== id)
-
-  res.status(204).end()
+    .then(result => res.status(204).end())
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (req, res) => {
@@ -75,10 +72,9 @@ app.post('/api/persons', (req, res) => {
   //   })
   // }
 
-  phone.save().then(savedPhone => {
-    res.status(201).json(savedPhone)
-  })
-
+  phone.save()
+    .then(savedPhone => res.status(201).json(savedPhone))
+    .catch(error => next(error))
 })
 
 app.listen(PORT)
