@@ -3,10 +3,8 @@ const app = express()
 const PORT = process.env.PORT || 8001 // Use process.env.PORT for flexibility
 const morgan = require('morgan')
 const cors = require('cors')
-const mongoose = require('./mango')
+const mongoose = require('./mongo')
 const Phone = require('./models/phone')
-
-const { generateId } = require('./utils')
 
 app.use(express.static('dist'))
 app.use(cors())
@@ -46,11 +44,17 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
   const id = req.params.id
-  const isPersonExist = phonebook.some(person => person.id === id)
+  // const isPersonExist = phonebook.some(person => person.id === id)
 
-  if(isPersonExist) return res.status(404).send('Person is not in the phonebook')
+  Phone.findByIdAndDelete(id)
+    .then(result => {
+      res.status(204).end()
+    })
 
-  phonebook = phonebook.filter(person => person.id !== id)
+
+  // if(isPersonExist) return res.status(404).send('Person is not in the phonebook')
+
+  // phonebook = phonebook.filter(person => person.id !== id)
 
   res.status(204).end()
 })

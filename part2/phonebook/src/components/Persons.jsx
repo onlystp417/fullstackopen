@@ -1,4 +1,3 @@
-import React from 'react'
 import perosonService from '../service/person'
 
 function Persons({ persons, onSetPersons, keyword }) {
@@ -9,9 +8,15 @@ function Persons({ persons, onSetPersons, keyword }) {
   }
 
   function handleDelete(id, name) {
+    console.log("vvvv")
     if(window.confirm(`Delete ${ name }`)) {
+      console.log(id)
       perosonService.remove(id)
-        .then(res => onSetPersons(persons.filter(person => person.id !== res.id)))
+        .then(res => {
+          const newArray = persons.filter(person => person.id !== id) 
+          console.log(newArray)
+          onSetPersons(persons.filter(person => person.id !== id))
+        })
     }
   }
 
