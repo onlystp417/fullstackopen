@@ -24,13 +24,13 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello Phonebook</h1>')
 })
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (req, res, next) => {
   Phone.find({})
     .then(phones => res.status(200).json(phones))
     .catch(error => next(error))
 })
 
-app.get('/api/info', (req, res) => {
+app.get('/api/info', (req, res, next) => {
   Phone.find({}).then(phones => {
     const currentTime = new Date
     const totalPerson = phones.length
@@ -42,13 +42,13 @@ app.get('/api/info', (req, res) => {
   })
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   Phone.findById({ id: req.params.id })
     .then(phone => res.status(200).json(phone))
     .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   const id = req.params.id
 
   Phone.findByIdAndDelete(id)
@@ -56,7 +56,7 @@ app.delete('/api/persons/:id', (req, res) => {
     .catch(error => next(error))
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body
   const phone = new Phone({ ...body })
   // const nameIsDuplicated = phonebook.some(person => person.name === body.name)
@@ -74,6 +74,15 @@ app.post('/api/persons', (req, res) => {
 
   phone.save()
     .then(savedPhone => res.status(201).json(savedPhone))
+    .catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (req, res, next) => {
+  const { number } = req.body
+  const id = req.params.id
+
+  Phone.findByIdAndUpdate(id, { number }, { new: true, runValidators: true, context: 'query' })
+    .then(updatedPerson => res.status(201).json(updatedPerson))
     .catch(error => next(error))
 })
 
