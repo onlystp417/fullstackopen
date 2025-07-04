@@ -9,6 +9,11 @@ const Phone = require('./models/phone')
 // custom middleware
 const errorMiddleware = (error, request, response, next) => {
   console.log(error.message);
+  
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+  
   next(error)
 }
 
@@ -31,15 +36,15 @@ app.get('/api/persons', (req, res, next) => {
 })
 
 app.get('/api/info', (req, res, next) => {
-  Phone.find({}).then(phones => {
-    const currentTime = new Date
-    const totalPerson = phones.length
-
-    res.status(200).send(`
-      <p>Phonebook has info for ${totalPerson} people.</p>
+  Phone.countDocuments()
+    .then(count => {
+      const currentTime = new Date
+      
+      res.status(200).send(`
+      <p>Phonebook has info for ${count} people.</p>
       <p>${currentTime.toString()}</p>
     `)
-  })
+    })
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -59,18 +64,12 @@ app.delete('/api/persons/:id', (req, res, next) => {
 app.post('/api/persons', (req, res, next) => {
   const body = req.body
   const phone = new Phone({ ...body })
-  // const nameIsDuplicated = phonebook.some(person => person.name === body.name)
 
   if(!(body.name && body.number)) {
     return res.status(400).json({ 
       error: 'Content missing' 
     })
   }
-  // else if(nameIsDuplicated) {
-  //   return res.status(400).json({ 
-  //     error: 'Name must be unique' 
-  //   })
-  // }
 
   phone.save()
     .then(savedPhone => res.status(201).json(savedPhone))
