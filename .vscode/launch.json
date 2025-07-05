@@ -11,6 +11,6 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/part3/index.js", // 直接執行檔案，路徑要對
       "console": "integratedTerminal",
-    }
+    },
   ]
 }

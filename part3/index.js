@@ -3,7 +3,6 @@ const app = express()
 const PORT = process.env.PORT || 8001 // Use process.env.PORT for flexibility
 const morgan = require('morgan')
 const cors = require('cors')
-const mongoose = require('./mongo')
 const Phone = require('./models/phone')
 
 // custom middleware
@@ -14,7 +13,7 @@ const errorMiddleware = (error, request, response, next) => {
   if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
   }
-  
+
   next(error)
 }
 
@@ -40,7 +39,7 @@ app.get('/api/info', (req, res, next) => {
   Phone.countDocuments()
     .then(count => {
       const currentTime = new Date
-      
+
       res.status(200).send(`
       <p>Phonebook has info for ${count} people.</p>
       <p>${currentTime.toString()}</p>
@@ -67,14 +66,12 @@ app.post('/api/persons', (req, res, next) => {
   const phone = new Phone({ ...body })
 
   if(!(body.name && body.number)) {
-    return res.status(400).json({ 
-      error: 'Content missing' 
+    return res.status(400).json({
+      error: 'Content missing'
     })
   }
 
-  phone.save()
-    .then(savedPhone => res.status(201).json(savedPhone))
-    .catch(error => next(error))
+  phone.save().then(savedPhone => res.status(201).json(savedPhone)).catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {

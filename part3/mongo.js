@@ -10,4 +10,4 @@ mongoose.connect(uri)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Connection error:', err.message))
 
-  module.exports = mongoose
+module.exports = mongoose

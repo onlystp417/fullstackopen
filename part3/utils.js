@@ -3,7 +3,7 @@ function generateId(list) {
     ? Math.max(...list.map(i => Number(i.id)))
     : 0
 
-    return String(maxId + 1)
+  return String(maxId + 1)
 }
 
 module.exports = {
