@@ -34,19 +34,25 @@ function PersonFrom({
           msg: `Added ${newName.trim()}`})
         resetAlert()
       })
+      .catch(err => {
+        onSetAlerMessage({
+          type: 'error',
+          msg: err
+        })
+        resetAlert()
+      })
 
     onSetNewName('')
     onSetNewNumber('')
   }
 
   function handleUpdate(uptPerson) {
+    console.log('nnn')
     const msg = `${uptPerson.name} is already added to phonebook, replace the old number with a new one?`
 
     if(window.confirm(msg)) {
       personService.update(uptPerson.id, uptPerson)
-        .then(res => {
-          onSetPersons(persons.map(person => person.id === uptPerson.id ? res : person))
-        })
+        .then(res => onSetPersons(persons.map(person => person.id === uptPerson.id ? res : person)))
         .then(() => {
           onSetAlerMessage({
             type: 'success',
@@ -55,13 +61,11 @@ function PersonFrom({
           resetAlert()
         })
         .catch(err => {
-          if(err.status === 404) {
-            onSetAlerMessage({
-              type: 'error',
-              msg: `Information of ${uptPerson.name} has already been removed from server.`
-            })
-            resetAlert()
-          }
+          console.log(err)
+          onSetAlerMessage({
+            type: 'error',
+            msg: err.error
+          })
         })
     }
   }

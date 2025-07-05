@@ -14,7 +14,8 @@ function create(newObj) {
   return promise
     .then(res => res.data)
     .catch(err => {
-      throw err
+      console.log(err)
+      throw err.response.data.error
     })
 }
 
@@ -23,6 +24,7 @@ function update(id, newObj) {
   return promise
     .then(res => res.data)
     .catch(err => {
+      console.log(err)
       throw err
     })
 }

@@ -8,10 +8,11 @@ const Phone = require('./models/phone')
 
 // custom middleware
 const errorMiddleware = (error, request, response, next) => {
-  console.log(error.message);
-  
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  }
+  if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
   
   next(error)
@@ -23,7 +24,7 @@ app.use(express.json())
 
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-app.use(errorMiddleware) // use custom middleware in the last line
+
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello Phonebook</h1>')
@@ -84,6 +85,8 @@ app.put('/api/persons/:id', (req, res, next) => {
     .then(updatedPerson => res.status(201).json(updatedPerson))
     .catch(error => next(error))
 })
+
+app.use(errorMiddleware) // use error middleware after route
 
 app.listen(PORT)
 console.log(`Server listen to port ${PORT}`)
