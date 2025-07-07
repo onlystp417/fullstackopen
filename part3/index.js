@@ -3,6 +3,7 @@ const app = express()
 const PORT = process.env.PORT || 8001 // Use process.env.PORT for flexibility
 const morgan = require('morgan')
 const cors = require('cors')
+const mongoose = require('./mongo')
 const Phone = require('./models/phone')
 
 // custom middleware
