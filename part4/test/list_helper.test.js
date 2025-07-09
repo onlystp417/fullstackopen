@@ -179,3 +179,123 @@ describe('favorite blog', () => {
     )
   })
 })
+
+describe('Author with most blogs', () => {
+  test('of empty blogs is "No post yet"', () => {
+    const blogs = []
+
+    assert(listHelper.mostBlog(blogs), 'No post yet')
+  })
+
+  test('when list has only one blog, get the only author and count 1', () => {
+    const blogs = [{
+      title: 'How people work after covid-19',
+      author: 'Kevin Brown',
+      url: 'www.mediem.com/owiu4rlkdj',
+      likes: 12937
+    }]
+
+    assert(listHelper.mostBlog(blogs), {
+      author: 'Kevin Brown',
+      blogs: 1
+    })
+  })
+
+    test('of a bigger list, get the most-blogs author', () => {
+      const blogs = [
+        {
+          title: 'How my parents divorced happily',
+          author: 'John Corner',
+          url: 'www.mediem.com/kj3j490kdhjsjh',
+          likes: 10100
+        },
+        {
+          title: 'The yesterday vibes',
+          author: 'King Lee',
+          url: 'www.mediem.com/dklf8923lrkjd',
+          likes: 10100
+        },
+        {
+          title: 'Make money wiser',
+          author: 'Kevin Brown',
+          url: 'www.mediem.com/z30ijfsm89fhj8',
+          likes: 5
+        },
+        {
+          title: 'University Law',
+          author: 'King Lee',
+          url: 'www.mediem.com/sdkfoihnk',
+          likes: 2368
+        },
+        {
+          title: 'How lyrics of 50 cent songs harm teenagers',
+          author: 'King Lee',
+          url: 'www.mediem.com/9ufjkdjslk',
+          likes: 1002
+        },
+        {
+          title: 'How people work after covid-19',
+          author: 'Kevin Brown',
+          url: 'www.mediem.com/owiu4rlkdj',
+          likes: 12937
+        }
+      ]
+
+      assert(listHelper.mostBlog(blogs), {
+        author: 'King Lee',
+        blogs: 3
+      })
+    })
+
+    test('with mutiple most-blogs author, get any of them', () => {
+      const blogs = [
+        {
+          title: 'The Labubu Phenomenon',
+          author: 'Kevin Brown',
+          url: 'www.mediem.com/doc32eon93jkbe',
+          likes: 51023
+        },
+        {
+          title: 'How my parents divorced happily',
+          author: 'John Corner',
+          url: 'www.mediem.com/kj3j490kdhjsjh',
+          likes: 10100
+        },
+        {
+          title: 'The yesterday vibes',
+          author: 'King Lee',
+          url: 'www.mediem.com/dklf8923lrkjd',
+          likes: 10100
+        },
+        {
+          title: 'Make money wiser',
+          author: 'Kevin Brown',
+          url: 'www.mediem.com/z30ijfsm89fhj8',
+          likes: 5
+        },
+        {
+          title: 'University Law',
+          author: 'King Lee',
+          url: 'www.mediem.com/sdkfoihnk',
+          likes: 2368
+        },
+        {
+          title: 'How lyrics of 50 cent songs harm teenagers',
+          author: 'King Lee',
+          url: 'www.mediem.com/9ufjkdjslk',
+          likes: 1002
+        },
+        {
+          title: 'How people work after covid-19',
+          author: 'Kevin Brown',
+          url: 'www.mediem.com/owiu4rlkdj',
+          likes: 12937
+        }
+      ] 
+
+      const result = listHelper.mostBlog(blogs)
+      const expected = { author: 'Kevin Brown', blogs: 3} || { author: 'King Lee', blogs: 3 }
+
+      assert(result, expected)
+    })
+})
