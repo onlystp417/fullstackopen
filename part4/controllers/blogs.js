@@ -16,12 +16,15 @@ blogRouter.get('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-blogRouter.post('/', (request, response, next) => {
+blogRouter.post('/', async (request, response, next) => {
   const blog = new Blog(request.body)
 
-  blog.save()
-    .then((result) => response.status(201).json(result))
-    .catch(error => next(error))
+  try {
+    const result = await blog.save()
+    response.status(201).json(result)
+  } catch(exception) {
+    next(exception)
+  }
 })
 
 blogRouter.put('/:id', (request, response, next) => {

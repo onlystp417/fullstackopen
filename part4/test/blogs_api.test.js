@@ -7,9 +7,9 @@ const testHelper = require('./test_helper')
 
 const api = supertest(app)
 
-testHelper.dataInitialize()
+describe.only('Test Blog API', () => {
+  testHelper.dataInitialize()
 
-describe('Test Blog API', () => {
   test('Blogs are returned as JSON', async () => {
     await api
       .get('/api/blogs')
@@ -25,10 +25,32 @@ describe('Test Blog API', () => {
 
   test('Blog identity field is "id", not "_id"', async () => {
     const res = await api.get('/api/blogs')
-    for(blog of res.body) {
+    for(let blog of res.body) {
       assert.ok(blog.hasOwnProperty('id'))
       assert.ok(!blog.hasOwnProperty('_id'))
     }
+  })
+
+  test.only('A valid blogs content can be added', async () => {
+    const newBlog = {
+      title: 'Backend learning road map',
+      author: 'Zack Vincene',
+      url: 'www.mediem.com/Backend_learning_road_map',
+      likes: 3936
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await testHelper.blogsInDb()
+
+    assert.strictEqual(blogsAtEnd.length, testHelper.initialBlogs.length + 1)
+    
+    const titles = blogsAtEnd.map(blog => blog.title)
+    assert(titles.includes('Backend learning road map'))
   })
 })
 
