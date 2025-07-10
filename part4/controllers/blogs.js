@@ -39,28 +39,33 @@ blogRouter.post('/', async (request, response, next) => {
   }
 })
 
-blogRouter.put('/:id', (request, response, next) => {
+blogRouter.put('/:id', async (request, response, next) => {
   const updatedBlog = request.body
-
-  Blog.findByIdAndUpdate(
-    request.params.id,
-    updatedBlog,
-    { new: true, runValidators: true, overwrite: true }
-  )
-    .then(result => response.status(200).json(result))
-    .catch(error => next(error))
+  try {
+    const result = await Blog.findByIdAndUpdate(
+      request.params.id,
+      updatedBlog,
+      { new: true, runValidators: true, overwrite: true }
+    )
+    response.status(200).json(result)
+  } catch(exception) {
+    next(exception)
+  }
 })
 
-blogRouter.patch('/:id', (request, response, next) => {
+blogRouter.patch('/:id', async (request, response, next) => {
   const updatedBlog = { ...request.body }
 
-  Blog.findByIdAndUpdate(
-    request.params.id,
-    updatedBlog,
-    { new: true, runValidators: true }
-  )
-    .then(result => response.status(200).json(result))
-    .catch(error => next(error))
+  try {
+    const result = await Blog.findByIdAndUpdate(
+      request.params.id,
+      updatedBlog,
+      { new: true, runValidators: true }
+    )
+    response.status(200).json(result)
+  } catch(exception) {
+    next(exception)
+  }
 })
 
 blogRouter.delete('/:id', async (request, response, next) => {

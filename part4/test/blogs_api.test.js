@@ -7,7 +7,7 @@ const testHelper = require('./test_helper')
 
 const api = supertest(app)
 
-describe('Test Blogs API', () => {
+describe.only('Test Blogs API', () => {
   testHelper.dataInitialize()
 
   describe('GET - /api/blogs', () => {
@@ -101,6 +101,24 @@ describe('Test Blogs API', () => {
       const isBlogInData = blogsAtEnd.find(blog => blog.id === blogIdToBeDeleted)
 
       assert.strictEqual(isBlogInData, undefined)
+    })
+  })
+
+  describe('PATCH - /api/blogs/:id', () => {
+    test('Update likes of blog and get the right likes', async () => {
+      const currentBlogs = await testHelper.blogsInDb()
+      const blogToBeUpdated = currentBlogs.find(blog => blog.title === 'The yesterday vibes')
+      const likes = blogToBeUpdated.likes + 1
+
+      await api.patch(`/api/blogs/${blogToBeUpdated.id}`)
+        .send({ likes })
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsAtEnd = await testHelper.blogsInDb()
+      const updatedBlog = blogsAtEnd.find(blog => blog.id === blogToBeUpdated.id)
+
+      assert.strictEqual(updatedBlog.likes, blogToBeUpdated.likes + 1)
     })
   })
 })
