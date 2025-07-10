@@ -22,6 +22,14 @@ describe('Test Blog API', () => {
 
     assert.strictEqual(res.body.length, testHelper.initialBlogs.length)
   })
+
+  test('Blog identity field is "id", not "_id"', async () => {
+    const res = await api.get('/api/blogs')
+    for(blog of res.body) {
+      assert.ok(blog.hasOwnProperty('id'))
+      assert.ok(!blog.hasOwnProperty('_id'))
+    }
+  })
 })
 
 after(async () => await mongoose.connection.close())
