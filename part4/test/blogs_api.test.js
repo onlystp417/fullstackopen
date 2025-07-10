@@ -7,7 +7,7 @@ const testHelper = require('./test_helper')
 
 const api = supertest(app)
 
-describe.only('Test Blog API', () => {
+describe.only('Test Blogs API', () => {
   testHelper.dataInitialize()
 
   test('Blogs are returned as JSON', async () => {
@@ -31,7 +31,7 @@ describe.only('Test Blog API', () => {
     }
   })
 
-  test.only('A valid blogs content can be added', async () => {
+  test('A valid blogs content can be added', async () => {
     const newBlog = {
       title: 'Backend learning road map',
       author: 'Zack Vincene',
@@ -51,6 +51,26 @@ describe.only('Test Blog API', () => {
     
     const titles = blogsAtEnd.map(blog => blog.title)
     assert(titles.includes('Backend learning road map'))
+  })
+
+  test.only('Initial "likes" as value 0 while it is a missing field', async () => {
+    const newBlogMissingLikes = {
+      title: 'Backend learning road map',
+      author: 'Zack Vincene',
+      url: 'www.mediem.com/Backend_learning_road_map'
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlogMissingLikes)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await testHelper.blogsInDb()
+    
+    const blogJustAdded = blogsAtEnd[blogsAtEnd.length - 1]
+    assert(blogJustAdded.hasOwnProperty('likes'))
+    assert.strictEqual(blogJustAdded.likes, 0)
   })
 })
 

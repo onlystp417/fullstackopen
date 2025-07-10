@@ -17,6 +17,9 @@ blogRouter.get('/:id', (request, response, next) => {
 })
 
 blogRouter.post('/', async (request, response, next) => {
+  if(!request.body.hasOwnProperty('likes'))
+    request.body.likes = 0
+
   const blog = new Blog(request.body)
 
   try {
