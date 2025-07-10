@@ -13,11 +13,13 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, request, response, next) => {
-  logger.error(error.message)
+  logger.error(error)
 
-  if(error.name === 'CastError') {
-    return response.status.send({ error: 'Malformatted id' })
-  }
+  if(error.name === 'CastError')
+    return response.status(400).send({ error: 'Malformatted id' })
+
+  if(error.name === 'MissingFields')
+    return response.status(400).send({ error: error.message })
 }
 
 module.exports = {

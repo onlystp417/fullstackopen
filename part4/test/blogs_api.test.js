@@ -72,6 +72,18 @@ describe.only('Test Blogs API', () => {
     assert(blogJustAdded.hasOwnProperty('likes'))
     assert.strictEqual(blogJustAdded.likes, 0)
   })
+
+    test.only('Bad request 400 while "title" or "url" properties are missing', async () => {
+    const newBlogMissingFields = {
+      author: 'Zack Vincene',
+      likes: 134
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlogMissingFields)
+      .expect(400)
+  })
 })
 
 after(async () => await mongoose.connection.close())
