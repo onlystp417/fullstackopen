@@ -7,7 +7,7 @@ const testHelper = require('./test_helper')
 
 const api = supertest(app)
 
-describe.only('Test Blogs API', () => {
+describe('Test Blogs API', () => {
   testHelper.dataInitialize()
 
   describe('GET - /api/blogs', () => {
@@ -89,7 +89,20 @@ describe.only('Test Blogs API', () => {
     })
   })
 
+  describe('DELETE - /api/blogs/:id', () => {
+    test('Successfully deletion respond status 204', async () => {
+      const currentBlogs = await testHelper.blogsInDb()
+      const blogIdToBeDeleted = currentBlogs.find(blog => blog.title === 'How my parents divorced happily').id
 
+      await api.delete(`/api/blogs/${blogIdToBeDeleted}`)
+        .expect(204)
+
+      const blogsAtEnd = await testHelper.blogsInDb()
+      const isBlogInData = blogsAtEnd.find(blog => blog.id === blogIdToBeDeleted)
+
+      assert.strictEqual(isBlogInData, undefined)
+    })
+  })
 })
 
 after(async () => await mongoose.connection.close())
