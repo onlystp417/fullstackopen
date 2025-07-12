@@ -4,11 +4,6 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const error = require('../utils/error')
 
-const getTokenFrom = req => {
-  const auth = req.get('authorization')
-  return auth && auth.startsWith('Bearer ') ? auth.replace('Bearer ', '') : null
-}
-
 blogRouter.get('/', async (req, res, next) => {
   const blogs = await Blog.find({})
   res.status(200).json(blogs)
@@ -20,8 +15,8 @@ blogRouter.get('/:id', async (req, res, next) => {
 })
 
 blogRouter.post('/', async (req, res, next) => {
-  const token = getTokenFrom(req)
-  const decodedToken = jwt.verify(token, process.env.SECRET)
+  console.log('req.token', req.token)
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
   
   if(!decodedToken.id)
     return next(error('Token invalid', 'AuthError'))
