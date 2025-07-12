@@ -1,9 +1,17 @@
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
+const error = require('../utils/error')
 
 const tokenExtractor = (req, res, next) => {
   const auth = req.get('authorization')
   const token = auth && auth.startsWith('Bearer ') ? auth.replace('Bearer ', '') : null
+  const userAuth = jwt.verify(token, process.env.SECRET)
+
+  if(!userAuth.id)
+    return next(error('Token invalid', 'AuthError'))
+
   req.token = token
+  req.userId = userAuth.id
   next()
 }
 

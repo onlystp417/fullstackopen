@@ -1,5 +1,4 @@
 const blogRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const error = require('../utils/error')
@@ -15,13 +14,8 @@ blogRouter.get('/:id', async (req, res, next) => {
 })
 
 blogRouter.post('/', async (req, res, next) => {
-  console.log('req.token', req.token)
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
-  
-  if(!decodedToken.id)
-    return next(error('Token invalid', 'AuthError'))
+  const user = await User.findById(req.userId)
 
-  const user = await User.findById(decodedToken.id)
   if(!user)
     return next(error('User missing or invalid userId', 'CastError'))
 
@@ -62,7 +56,18 @@ blogRouter.patch('/:id', async (req, res, next) => {
 })
 
 blogRouter.delete('/:id', async (req, res, next) => {
+  const user = await User.findById(req.userId)
+  const deleteBlog = await Blog.findById(req.params.id)
+
+  if(!deleteBlog)
+    return next(error('Blog not found with the given id', 'CastError'))
+
+  if(deleteBlog.userId.toString() !== user._id.toString())
+    return next(error('Forbidden: You are not allowed to access this resource', 'AuthError'))
+
   await Blog.findByIdAndDelete(req.params.id)
+  user.blogs = user.blogs.filter(blogId => blogId.toString() !== req.params.id)
+  await user.save()
   res.status(204).end()
 })
 
