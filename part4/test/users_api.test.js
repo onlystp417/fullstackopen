@@ -1,6 +1,6 @@
 const { describe, test, after } = require('node:test')
 const assert = require('node:assert')
-const mongoose = require('../libs/mongo')
+require('../libs/mongo')
 const supertest = require('supertest')
 const app =   require('../app')
 const testHelper = require('./test_helper')
@@ -8,10 +8,33 @@ const User = require('../models/user')
 
 const api =supertest(app)
 
-describe.only('Test Users API', () => {
+describe('Test Users API', () => {
   testHelper.dataInitialize(User, 'users')
+
+  describe('GET - /api/users', () => {
+    test('Blogs are returned as JSON', async () => {
+      await api
+        .get('/api/users')
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    })
   
-  describe.only('POST - /api/users', () => {
+    test('All blogs are returned', async () => {
+      const res = await api.get('/api/users')
+  
+      assert.strictEqual(res.body.length, testHelper.initialData.users.length)
+    })
+
+    test('Blog identity field is "id", not "_id"', async () => {
+      const res = await api.get('/api/users')
+      for(let user of res.body) {
+        assert.ok(user.hasOwnProperty('id'))
+        assert.ok(!user.hasOwnProperty('_id'))
+      }
+    })
+  })
+  
+  describe('POST - /api/users', () => {
     test('A valid user content can be added', async () => {
       const newUser = {
         userName: 'onlystp',
