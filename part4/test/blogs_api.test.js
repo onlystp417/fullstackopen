@@ -4,11 +4,12 @@ const mongoose = require('../libs/mongo')
 const supertest = require('supertest')
 const app =   require('../app')
 const testHelper = require('./test_helper')
+const Blog = require('../models/blog')
 
 const api = supertest(app)
 
 describe.only('Test Blogs API', () => {
-  testHelper.dataInitialize()
+  testHelper.dataInitialize(Blog, 'blogs')
 
   describe('GET - /api/blogs', () => {
     test('Blogs are returned as JSON', async () => {
@@ -21,7 +22,7 @@ describe.only('Test Blogs API', () => {
     test('All blogs are returned', async () => {
       const res = await api.get('/api/blogs')
   
-      assert.strictEqual(res.body.length, testHelper.initialBlogs.length)
+      assert.strictEqual(res.body.length, testHelper.initialData.blogs.length)
     })
   
     test('Blog identity field is "id", not "_id"', async () => {
@@ -34,7 +35,7 @@ describe.only('Test Blogs API', () => {
   })
 
   describe('POST - /api/blogs', () => {
-    test('A valid blogs content can be added', async () => {
+    test('A valid blog content can be added', async () => {
       const newBlog = {
         title: 'Backend learning road map',
         author: 'Zack Vincene',
@@ -48,9 +49,9 @@ describe.only('Test Blogs API', () => {
         .expect(201)
         .expect('Content-Type', /application\/json/)
   
-      const blogsAtEnd = await testHelper.blogsInDb()
+      const blogsAtEnd = await testHelper.dataInDb(Blog)
   
-      assert.strictEqual(blogsAtEnd.length, testHelper.initialBlogs.length + 1)
+      assert.strictEqual(blogsAtEnd.length, testHelper.initialData.blogs.length + 1)
       
       const titles = blogsAtEnd.map(blog => blog.title)
       assert(titles.includes('Backend learning road map'))
@@ -69,7 +70,7 @@ describe.only('Test Blogs API', () => {
         .expect(201)
         .expect('Content-Type', /application\/json/)
   
-      const blogsAtEnd = await testHelper.blogsInDb()
+      const blogsAtEnd = await testHelper.dataInDb(Blog)
       
       const blogJustAdded = blogsAtEnd[blogsAtEnd.length - 1]
       assert(blogJustAdded.hasOwnProperty('likes'))
@@ -91,13 +92,13 @@ describe.only('Test Blogs API', () => {
 
   describe('DELETE - /api/blogs/:id', () => {
     test('Successfully deletion respond status 204', async () => {
-      const currentBlogs = await testHelper.blogsInDb()
+      const currentBlogs = await testHelper.dataInDb(Blog)
       const blogIdToBeDeleted = currentBlogs.find(blog => blog.title === 'How my parents divorced happily').id
 
       await api.delete(`/api/blogs/${blogIdToBeDeleted}`)
         .expect(204)
 
-      const blogsAtEnd = await testHelper.blogsInDb()
+      const blogsAtEnd = await testHelper.dataInDb(Blog)
       const isBlogInData = blogsAtEnd.find(blog => blog.id === blogIdToBeDeleted)
 
       assert.strictEqual(isBlogInData, undefined)
@@ -106,7 +107,7 @@ describe.only('Test Blogs API', () => {
 
   describe('PATCH - /api/blogs/:id', () => {
     test('Update likes of blog and get the right likes', async () => {
-      const currentBlogs = await testHelper.blogsInDb()
+      const currentBlogs = await testHelper.dataInDb(Blog)
       const blogToBeUpdated = currentBlogs.find(blog => blog.title === 'The yesterday vibes')
       const likes = blogToBeUpdated.likes + 1
 
@@ -115,7 +116,7 @@ describe.only('Test Blogs API', () => {
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
-      const blogsAtEnd = await testHelper.blogsInDb()
+      const blogsAtEnd = await testHelper.dataInDb(Blog)
       const updatedBlog = blogsAtEnd.find(blog => blog.id === blogToBeUpdated.id)
 
       assert.strictEqual(updatedBlog.likes, blogToBeUpdated.likes + 1)

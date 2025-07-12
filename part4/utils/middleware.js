@@ -13,13 +13,21 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, request, response, next) => {
-  logger.error(error)
+  // logger.error(error)
+  logger.error(error.name)
+  logger.error(error.message)
 
   if(error.name === 'CastError')
     return response.status(400).send({ error: 'Malformatted id' })
 
   if(error.name === 'MissingFields')
     return response.status(400).send({ error: error.message })
+
+  if(error.name === 'ValidationError')
+    return response.status(400).send({ error: error.message })
+
+  if(error.name === 'MongoServerError' && error.message.includes('E11000'))
+    return response.status(400).send({error: `${request.body.userName} is been used`})
 }
 
 module.exports = {

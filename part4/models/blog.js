@@ -1,22 +1,10 @@
-const mongoose = require('mongoose')
+const { createBaseModel } = require('../utils/model_helper')
 
-const blogSchema = mongoose.Schema({
+const Blog = createBaseModel({
   title: String,
   author: String,
   url: String,
   likes: Number,
-})
-
-// transform data before sent to frontend
-blogSchema.set('toJSON', {
-  transform: (document, returnObject) => {
-    returnObject.id = returnObject._id.toString()
-
-    delete returnObject._id
-    delete returnObject.__v
-  }
-})
-
-const Blog = mongoose.model('Blog', blogSchema)
+}, 'Blog')
 
 module.exports = Blog

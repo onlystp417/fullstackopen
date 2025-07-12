@@ -10,3 +10,5 @@ dist
 .vscode/*
 !.vscode/extensions.json
 .DS_Store
+
+REST_case

@@ -5,10 +5,12 @@ const app = express()
 
 // controllers
 const blogRouter = require('./controllers/blogs')
+const userRouter = require('./controllers/users')
 
 app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger)
+app.use('/api/users', userRouter)
 app.use('/api/blogs', blogRouter)
 app.use(unknownEndpoint)
 app.use(errorHandler)
