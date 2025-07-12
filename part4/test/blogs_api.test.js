@@ -57,7 +57,7 @@ describe.only('Test Blogs API', () => {
       assert(titles.includes('Backend learning road map'))
     })
   
-    test('Initial "likes" as value 0 while it is a missing field', async () => {
+    test.only('Initial "likes" as value 0 while it is a missing field', async () => {
       const newBlogMissingLikes = {
         title: 'Backend learning road map',
         author: 'Zack Vincene',

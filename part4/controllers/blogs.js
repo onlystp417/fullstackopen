@@ -15,9 +15,6 @@ blogRouter.get('/:id', async (request, response, next) => {
 blogRouter.post('/', async (request, response, next) => {
   const newBlog = request.body
 
-  if(!newBlog.hasOwnProperty('likes'))
-    newBlog.likes = 0
-
   if(!newBlog.hasOwnProperty('title') || !newBlog.hasOwnProperty('url')) {
     return next(error(
       'Missing required fields',

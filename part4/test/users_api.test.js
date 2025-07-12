@@ -53,7 +53,7 @@ describe.only('Test Users API', () => {
       assert.strictEqual(usersAtStart.length, usersAtEnd.length)
     })
 
-    test.only('Password and userName must be atleast 3 chars long', async () => {
+    test('Password and userName must be atleast 3 chars long', async () => {
       const usersAtStart = await testHelper.dataInDb(User)
 
       const newUser = {

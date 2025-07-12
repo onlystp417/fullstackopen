@@ -4,7 +4,10 @@ const Blog = createBaseModel({
   title: String,
   author: String,
   url: String,
-  likes: Number,
+  likes: {
+    type: Number,
+    default: 0
+  }
 }, 'Blog')
 
 module.exports = Blog
