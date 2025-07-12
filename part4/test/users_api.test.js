@@ -12,7 +12,7 @@ describe.only('Test Users API', () => {
   testHelper.dataInitialize(User, 'users')
   
   describe.only('POST - /api/users', () => {
-    test.only('A valid user content can be added', async () => {
+    test('A valid user content can be added', async () => {
       const newUser = {
         userName: 'onlystp',
         name: 'Jin Hsieh',
@@ -32,7 +32,7 @@ describe.only('Test Users API', () => {
       assert(userNames.includes('onlystp'))
     })
     
-    test.only('Duplicated username cannot be added', async () => {
+    test('Duplicated username cannot be added', async () => {
       const usersAtStart = await testHelper.dataInDb(User)
 
       const newUser = {
@@ -51,6 +51,27 @@ describe.only('Test Users API', () => {
 
       const usersAtEnd = await testHelper.dataInDb(User)
       assert.strictEqual(usersAtStart.length, usersAtEnd.length)
+    })
+
+    test.only('Password and userName must be atleast 3 chars long', async () => {
+      const usersAtStart = await testHelper.dataInDb(User)
+
+      const newUser = {
+        userName: 'ro',
+        name: 'Heisenberg White',
+        password: 'bilibalapon'
+      }
+
+      const result = await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+      assert(result.body.error.includes('shorter than the minimum allowed length (3)'))
+
+      const usersAtEnd = await testHelper.dataInDb(User)
+      assert.strictEqual(usersAtEnd.length, usersAtStart.length)
     })
   })
 

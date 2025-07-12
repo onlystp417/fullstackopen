@@ -1,5 +1,6 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const error = require('../utils/error')
 
 blogRouter.get('/', async (request, response, next) => {
   const blogs = await Blog.find({})
@@ -18,10 +19,10 @@ blogRouter.post('/', async (request, response, next) => {
     newBlog.likes = 0
 
   if(!newBlog.hasOwnProperty('title') || !newBlog.hasOwnProperty('url')) {
-    const error = new Error('Missing required fields')
-    error.name = 'MissingFields'
-    next(error)
-    return
+    return next(error(
+      'Missing required fields',
+      'MissingFields'
+    ))
   }
 
   const blog = new Blog(newBlog)

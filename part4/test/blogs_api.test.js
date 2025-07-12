@@ -34,7 +34,7 @@ describe.only('Test Blogs API', () => {
     })
   })
 
-  describe('POST - /api/blogs', () => {
+  describe.only('POST - /api/blogs', () => {
     test('A valid blog content can be added', async () => {
       const newBlog = {
         title: 'Backend learning road map',
