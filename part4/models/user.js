@@ -1,4 +1,5 @@
 const { createBaseModel } = require('../utils/model_helper')
+const mongoose = require('mongoose')
 
 const User = createBaseModel({
   userName: {
@@ -15,6 +16,10 @@ const User = createBaseModel({
   passwordHash: {
     type: String,
     required: true
+  },
+  blogs: {
+    type: [{ type: mongoose.Schema.Types.ObjectId , ref: 'Blog' }],
+    default: []
   }
 }, 'User')
 

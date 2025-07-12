@@ -1,16 +1,12 @@
-const { beforeEach } = require('node:test')
-
 const initialData = {
   'blogs': [
     {
       title: 'How my parents divorced happily',
-      author: 'John Corner',
       url: 'www.mediem.com/kj3j490kdhjsjh',
       likes: 5674
     },
     {
       title: 'The yesterday vibes',
-      author: 'King Lee',
       url: 'www.mediem.com/dklf8923lrkjd',
       likes: 10021
     }
@@ -24,11 +20,9 @@ const initialData = {
   ]
 }
 
-const dataInitialize = (model, dataName) => {
-  beforeEach(async () => {
+const dataInitialize = async (model, dataName) => {
     await model.deleteMany({})
     await model.insertMany(initialData[dataName])
-  })
 }
 
 const dataInDb = async (model) => {

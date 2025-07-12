@@ -1,15 +1,20 @@
 const { describe, test, after } = require('node:test')
 const assert = require('node:assert')
+const { beforeEach } = require('node:test')
 const mongoose = require('../libs/mongo')
 const supertest = require('supertest')
 const app =   require('../app')
 const testHelper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
-describe.only('Test Blogs API', () => {
-  testHelper.dataInitialize(Blog, 'blogs')
+describe('Test Blogs API', () => {
+  beforeEach(async () => {
+    await testHelper.dataInitialize(Blog, 'blogs')
+    await testHelper.dataInitialize(User, 'users')
+  })
 
   describe('GET - /api/blogs', () => {
     test('Blogs are returned as JSON', async () => {
@@ -34,34 +39,47 @@ describe.only('Test Blogs API', () => {
     })
   })
 
-  describe.only('POST - /api/blogs', () => {
+  describe('POST - /api/blogs', () => {
     test('A valid blog content can be added', async () => {
+      const users = await testHelper.dataInDb(User)
+      const user = users[0]
+      const userId = user.id
+
       const newBlog = {
         title: 'Backend learning road map',
-        author: 'Zack Vincene',
         url: 'www.mediem.com/Backend_learning_road_map',
-        likes: 3936
+        userId
       }
-  
-      await api
+
+      const res = await api
         .post('/api/blogs')
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
-  
+
       const blogsAtEnd = await testHelper.dataInDb(Blog)
+      const usersAtEnd = await testHelper.dataInDb(User)
+      const userAtEnd = usersAtEnd.find(user => user.id === userId)
+      // blogs is deep array, toJSON only do the forst layer fields in user
+      const userBlogsAtEnd = userAtEnd.blogs.map(blog => blog.toJSON())
   
       assert.strictEqual(blogsAtEnd.length, testHelper.initialData.blogs.length + 1)
+      assert.strictEqual(res.body.userId, userId)
+      assert(userBlogsAtEnd.includes(res.body.id))
       
       const titles = blogsAtEnd.map(blog => blog.title)
       assert(titles.includes('Backend learning road map'))
     })
   
-    test.only('Initial "likes" as value 0 while it is a missing field', async () => {
+    test('Initial "likes" as value 0 while it is a missing field', async () => {
+      const users = await testHelper.dataInDb(User)
+      const user = users[0]
+      const userId = user.id
+
       const newBlogMissingLikes = {
         title: 'Backend learning road map',
-        author: 'Zack Vincene',
-        url: 'www.mediem.com/Backend_learning_road_map'
+        url: 'www.mediem.com/Backend_learning_road_map',
+        userId
       }
   
       await api

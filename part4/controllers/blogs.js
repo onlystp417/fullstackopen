@@ -1,57 +1,64 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const error = require('../utils/error')
 
-blogRouter.get('/', async (request, response, next) => {
+blogRouter.get('/', async (req, res, next) => {
   const blogs = await Blog.find({})
-  response.status(200).json(blogs)
+  res.status(200).json(blogs)
 })
 
-blogRouter.get('/:id', async (request, response, next) => {
-  const result = await Blog.findById(request.params.id)
-  response.status(200).json(result)
+blogRouter.get('/:id', async (req, res, next) => {
+  const result = await Blog.findById(req.params.id)
+  res.status(200).json(result)
 })
 
-blogRouter.post('/', async (request, response, next) => {
-  const newBlog = request.body
+blogRouter.post('/', async (req, res, next) => {
+  const { userId, ...rest } = req.body
+  const user = await User.findById(userId)
 
-  if(!newBlog.hasOwnProperty('title') || !newBlog.hasOwnProperty('url')) {
-    return next(error(
-      'Missing required fields',
-      'MissingFields'
-    ))
-  }
+  if(!user)
+    return next(error('User missing or invalid userId', 'CastError'))
 
-  const blog = new Blog(newBlog)
+  if(!rest.hasOwnProperty('title') || !rest.hasOwnProperty('url'))
+    return next(error('Missing required fields', 'MissingFields'))
 
-  const result = await blog.save()
-  response.status(201).json(result)
+  const blog = new Blog({
+    ...rest,
+    userId: user._id
+  })
+  const savedBlog = await blog.save()
+
+  user.blogs.push(savedBlog._id)
+  await user.save()
+
+  res.status(201).json(savedBlog)
 })
 
-blogRouter.put('/:id', async (request, response, next) => {
-  const updatedBlog = request.body
+blogRouter.put('/:id', async (req, res, next) => {
+  const updatedBlog = req.body
   const result = await Blog.findByIdAndUpdate(
-    request.params.id,
+    req.params.id,
     updatedBlog,
     { new: true, runValidators: true, overwrite: true }
   )
-  response.status(200).json(result)
+  res.status(200).json(result)
 })
 
-blogRouter.patch('/:id', async (request, response, next) => {
-  const updatedBlog = { ...request.body }
+blogRouter.patch('/:id', async (req, res, next) => {
+  const updatedBlog = { ...req.body }
 
   const result = await Blog.findByIdAndUpdate(
-    request.params.id,
+    req.params.id,
     updatedBlog,
     { new: true, runValidators: true }
   )
-  response.status(200).json(result)
+  res.status(200).json(result)
 })
 
-blogRouter.delete('/:id', async (request, response, next) => {
-  await Blog.findByIdAndDelete(request.params.id)
-  response.status(204).end()
+blogRouter.delete('/:id', async (req, res, next) => {
+  await Blog.findByIdAndDelete(req.params.id)
+  res.status(204).end()
 })
 
 module.exports = blogRouter
