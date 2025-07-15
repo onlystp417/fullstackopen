@@ -1,6 +1,6 @@
 const express = require('express')
 require('./libs/mongo') // connet to MongoDB
-const { tokenExtractor, errorHandler, unknownEndpoint, requestLogger } = require('./utils/middleware')
+const { errorHandler, unknownEndpoint, requestLogger } = require('./utils/middleware')
 const app = express()
 
 // controllers
@@ -12,7 +12,6 @@ app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger)
 app.use('/api/login', loginRouter)
-app.use(tokenExtractor)
 app.use('/api/users', userRouter)
 app.use('/api/blogs', blogRouter)
 app.use(unknownEndpoint)
