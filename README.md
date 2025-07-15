@@ -31,3 +31,10 @@ View [Exercise](./part3/README.md)
 2. Deploying APP to internet
 3. Saving data to MongoDB
 4. Validation and Eslint
+
+### Part 4 - Testing Express servers, user administration
+View [Exercise](./part4/README.md)
+1. Structure of backend application, introduction to testing
+2. Testing the backend
+3. User administration
+4. Token authentication
