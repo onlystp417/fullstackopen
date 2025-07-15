@@ -1,5 +1,5 @@
 const initialData = {
-  'blogs': [
+  blogs: [
     {
       title: 'How my parents divorced happily',
       url: 'www.mediem.com/kj3j490kdhjsjh',
@@ -15,7 +15,7 @@ const initialData = {
     {
       "userName": "root",
       "name": "defaultUser",
-      "passwordHash": "$2b$10$YhnzMV.ObXvg/EtCn7HC6Oz6Za1Bs/KaSS5O8kK25SdnmkeUbr0e2"
+      "password": "goHell7788"
     }
   ]
 }

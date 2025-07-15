@@ -17,7 +17,6 @@ userRouter.post('/', async (req, res, next) => {
     next(error(`Path password is shorter than the minimum allowed length (3)`, 'ValidationError'))
 
   const passwordHash = await bcrypt.hash(password, 10) // 10 is saltRound to decide how slower it take / how safe it is
-
   const newUser = new User({ passwordHash, name, userName })
   const result = await newUser.save()
   res.status(201).json(result)

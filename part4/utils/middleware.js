@@ -5,6 +5,10 @@ const error = require('../utils/error')
 const tokenExtractor = (req, res, next) => {
   const auth = req.get('authorization')
   const token = auth && auth.startsWith('Bearer ') ? auth.replace('Bearer ', '') : null
+
+  if(!token)
+    return next(error('Token is not provided', 'AuthError'))
+
   const userAuth = jwt.verify(token, process.env.SECRET)
 
   if(!userAuth.id)

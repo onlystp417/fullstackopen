@@ -1,4 +1,4 @@
-const { describe, test, after } = require('node:test')
+const { describe, test, after, afterEach } = require('node:test')
 const assert = require('node:assert')
 const { beforeEach } = require('node:test')
 const mongoose = require('../libs/mongo')
@@ -11,9 +11,20 @@ const User = require('../models/user')
 const api = supertest(app)
 
 describe('Test Blogs API', () => {
+  let userId, token
   beforeEach(async () => {
     await testHelper.dataInitialize(Blog, 'blogs')
-    await testHelper.dataInitialize(User, 'users')
+    await User.deleteMany({})
+    await api
+      .post('/api/users')
+      .send(testHelper.initialData.users[0])
+
+    const loginRes = await api  
+      .post('/api/login')
+      .send(testHelper.initialData.users[0])
+
+    userId = loginRes.body.id
+    token = loginRes.body.token
   })
 
   describe('GET - /api/blogs', () => {
@@ -41,10 +52,6 @@ describe('Test Blogs API', () => {
 
   describe('POST - /api/blogs', () => {
     test('A valid blog content can be added', async () => {
-      const users = await testHelper.dataInDb(User)
-      const user = users[0]
-      const userId = user.id
-
       const newBlog = {
         title: 'Backend learning road map',
         url: 'www.mediem.com/Backend_learning_road_map',
@@ -53,6 +60,7 @@ describe('Test Blogs API', () => {
 
       const res = await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -72,10 +80,6 @@ describe('Test Blogs API', () => {
     })
   
     test('Initial "likes" as value 0 while it is a missing field', async () => {
-      const users = await testHelper.dataInDb(User)
-      const user = users[0]
-      const userId = user.id
-
       const newBlogMissingLikes = {
         title: 'Backend learning road map',
         url: 'www.mediem.com/Backend_learning_road_map',
@@ -84,6 +88,7 @@ describe('Test Blogs API', () => {
   
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlogMissingLikes)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -103,17 +108,46 @@ describe('Test Blogs API', () => {
   
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlogMissingFields)
         .expect(400)
+    })
+
+    test('Status code 401 Unauthorized if a token is not provided', async () => {
+      const newBlogMissingLikes = {
+        title: 'Backend learning road map',
+        url: 'www.mediem.com/Backend_learning_road_map',
+        userId
+      }
+  
+      await api
+        .post('/api/blogs')
+        .set('Authorization', 'Bearer ')
+        .send(newBlogMissingLikes)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
     })
   })
 
   describe('DELETE - /api/blogs/:id', () => {
     test('Successfully deletion respond status 204', async () => {
-      const currentBlogs = await testHelper.dataInDb(Blog)
-      const blogIdToBeDeleted = currentBlogs.find(blog => blog.title === 'How my parents divorced happily').id
+      const newBlog = {
+        title: 'Backend learning road map',
+        url: 'www.mediem.com/Backend_learning_road_map',
+        userId
+      }
 
-      await api.delete(`/api/blogs/${blogIdToBeDeleted}`)
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newBlog)
+
+      const currentUser = await User.findById(userId)
+      const blogIdToBeDeleted = currentUser.blogs[0]
+
+      const res = await api
+        .delete(`/api/blogs/${blogIdToBeDeleted}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(204)
 
       const blogsAtEnd = await testHelper.dataInDb(Blog)
@@ -131,6 +165,7 @@ describe('Test Blogs API', () => {
 
       await api.patch(`/api/blogs/${blogToBeUpdated.id}`)
         .send({ likes })
+        .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
