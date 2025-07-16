@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -10,6 +11,8 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [userName, setUserName] = useState('')
   const [user, setUser] = useState(null)
+  const [notifyType, setNotifyType] = useState('')
+  const [notifyMsg, setNotifyMsg] = useState('')
 
   useEffect(() => {
     const userInfo = JSON.parse(window.localStorage.getItem('user'))
@@ -26,7 +29,7 @@ const App = () => {
     e.preventDefault()
 
     if(!password || !userName)
-      alert('User name and Password needed.')
+      handleNotify('', 'User name and Password required')
 
     try {
       const data = await loginService.login({ password, userName })
@@ -34,8 +37,9 @@ const App = () => {
       setUser(data) 
       setUserName('')
       setPassword('')
+      handleNotify('success', 'Login Success')
     } catch(exception) {
-      alert(exception)
+      handleNotify('', exception)
     }
   }
 
@@ -47,18 +51,30 @@ const App = () => {
   const handleCreateBlog = async (newBlog) => {
     const { title, author, url } = newBlog
     if(!title || !author || !url)
-      alert('Blog imformation are required')
+      return handleNotify('', 'Blog imformation are required')
 
     try {
       const data = await blogService.create(newBlog, user.token)
       setBlogs(blogs.concat([data]))
+      handleNotify('success', `Blog ${data.title} created`)
     } catch(exception) {
       alert(exception)
+      handleNotify('', exception)
     }
+  }
+
+  const handleNotify = ( type, msg ) => {
+    setNotifyMsg(msg)
+    setNotifyType(type)
+    setTimeout(() => {
+      setNotifyMsg('')
+      setNotifyType('type')
+    }, 3000)
   }
 
   return (
     <div>
+      <Notification message={ notifyMsg } type={ notifyType }/>
       {
         !user ?
         <LoginForm
