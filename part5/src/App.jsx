@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -11,12 +12,15 @@ const App = () => {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    if(!user) return
+    const userInfo = JSON.parse(window.localStorage.getItem('user'))
+    if(!userInfo) return
+
+    setUser(userInfo)
 
     blogService
       .getAll()
       .then(data => setBlogs(data))
-  }, [user])
+  }, [])
 
   const handleLogin = async e => {
     e.preventDefault()
@@ -36,8 +40,21 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setUser(null)
     window.localStorage.removeItem('user')
+    setUser(null)
+  }
+
+  const handleCreateBlog = async (newBlog) => {
+    const { title, author, url } = newBlog
+    if(!title || !author || !url)
+      alert('Blog imformation are required')
+
+    try {
+      const data = await blogService.create(newBlog, user.token)
+      setBlogs(blogs.concat([data]))
+    } catch(exception) {
+      alert(exception)
+    }
   }
 
   return (
@@ -58,6 +75,9 @@ const App = () => {
               <button onClick={ handleLogout }>log out</button>
             </p>
           )}
+          <hr />
+          <BlogForm onCreateBlog={ handleCreateBlog } />
+          <hr />
           <Blog blogs={ blogs } />
         </div>
       }

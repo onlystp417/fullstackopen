@@ -1,11 +1,11 @@
 const Blog = ({ blogs }) => (
   <div>
-    <h2>blogs</h2>
+    <h2>Blogs</h2>
     <ul>
       {
         blogs.map(blog => (
           <li key={ blog.id }>
-            { blog.title } | by { blog.userId }
+            { blog.title } | by { blog.author }
           </li>
         ))
       }
