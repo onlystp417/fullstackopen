@@ -1,37 +1,19 @@
-import { useState } from 'react'
-import loginService from '../services/login'
-
 const LoginForm = ({
     password,
     userName,
     onSetPassword,
     onSetUserName,
-    onSetUser }) => {
-
-  const handleLogin = async e => {
-    e.preventDefault()
-
-    if(!password || !userName)
-      alert('User name and Password needed.')
-
-    try {
-      const data = await loginService.login({ password, userName })
-      onSetUser(data) 
-      onSetUserName('')
-      onSetPassword('')
-    } catch(exception) {
-      alert(exception)
-    }
-  }
+    onLogin}) => {
 
   return (
-    <form onSubmit={ handleLogin }>
+    <form onSubmit={ onLogin }>
       <h2>Login</h2>
       <div>
         <span>User Name: </span>
         <input
           name="userName"
           type="text"
+          value={ userName }
           onChange={({ target }) => onSetUserName(target.value)}
         />
       </div>
@@ -40,6 +22,7 @@ const LoginForm = ({
         <input
           name="password"
           type="password"
+          value={ password }
           onChange={({ target }) => onSetPassword(target.value)}
         />
       </div>
