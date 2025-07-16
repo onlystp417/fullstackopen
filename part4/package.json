@@ -1,5 +1,5 @@
 {
-  "name": "blogs",
+  "name": "blogs_backend",
   "version": "1.0.0",
   "type": "commonjs",
   "main": "index.js",

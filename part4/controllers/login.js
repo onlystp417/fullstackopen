@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const error = require('../utils/error')
 
-loginRouter.post('/', async (req, res) => {
+loginRouter.post('/', async (req, res, next) => {
   const { password, userName } = req.body
 
   if(!password || !userName)

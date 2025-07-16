@@ -8,6 +8,7 @@ const Blog = createBaseModel({
     type: Number,
     default: 0
   },
+  author: String,
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User' // the model name registered to mongoose
