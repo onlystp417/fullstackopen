@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [password, setPassword] = useState('')
-  const [userName, setUserName] = useState('')
   const [user, setUser] = useState(null)
   const [notifyType, setNotifyType] = useState('')
   const [notifyMsg, setNotifyMsg] = useState('')
@@ -25,8 +24,8 @@ const App = () => {
       .then(data => setBlogs(data))
   }, [])
 
-  const handleLogin = async e => {
-    e.preventDefault()
+  const handleLogin = async (loginInfo) => {
+    const { password, userName } = loginInfo
 
     if(!password || !userName)
       handleNotify('', 'User name and Password required')
@@ -35,8 +34,6 @@ const App = () => {
       const data = await loginService.login({ password, userName })
       window.localStorage.setItem('user', JSON.stringify(data))
       setUser(data)
-      setUserName('')
-      setPassword('')
       handleNotify('success', 'Login Success')
     } catch(exception) {
       handleNotify('', exception)
@@ -72,30 +69,28 @@ const App = () => {
     }, 3000)
   }
 
+  const loggedTemplate = () => (
+    <p>
+      { `${user?.name} logged in ` }
+      <button onClick={ handleLogout }>log out</button>
+    </p>
+  )
+
   return (
     <div>
       <Notification message={ notifyMsg } type={ notifyType }/>
       {
         !user
-          ? <LoginForm
-            password={ password }
-            userName={ userName }
-            onSetPassword = { setPassword }
-            onSetUserName = { setUserName }
-            onLogin={ handleLogin }
-          />
-          : <div>
-            {user && (
-              <p>
-                { `${user?.name} logged in ` }
-                <button onClick={ handleLogout }>log out</button>
-              </p>
-            )}
+          ? <LoginForm onLogin={ handleLogin } />
+          : <>
+            {user && loggedTemplate() }
             <hr />
-            <BlogForm onCreateBlog={ handleCreateBlog } />
+            <Togglable buttonLable="Add blog">
+              <BlogForm onCreateBlog={ handleCreateBlog } />
+            </Togglable>
             <hr />
             <Blog blogs={ blogs } />
-          </div>
+          </>
       }
     </div>
   )
