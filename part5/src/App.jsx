@@ -12,6 +12,9 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [notifyType, setNotifyType] = useState('')
   const [notifyMsg, setNotifyMsg] = useState('')
+  const [desc, setDesc] = useState(true)
+
+  const activeStyle = { backgroundColor: '#292e2a', color: 'white' }
 
   useEffect(() => {
     const userInfo = JSON.parse(window.localStorage.getItem('user'))
@@ -25,8 +28,13 @@ const App = () => {
   }, [])
 
   const blogsForUI = useMemo(() => {
-    return blogs.map(blog => ({ ...blog, user }))
-  }, [blogs, user])
+    const sorted = [...blogs].sort((a, b) => {
+      return desc
+        ? b.likes - a.likes // desc
+        : a.likes - b.likes // asc
+    })
+    return sorted.map(blog => ({ ...blog, user }))
+  }, [blogs, user, desc])
 
   const handleLogin = async (loginInfo) => {
     const { password, userName } = loginInfo
@@ -82,6 +90,10 @@ const App = () => {
     }, 3000)
   }
 
+  const handleDesc = (sortType) => {
+    sortType === 'desc' ? setDesc(true) : setDesc(false)
+  }
+
   const loggedTemplate = () => (
     <p>
       { `${user?.name} logged in ` }
@@ -102,7 +114,13 @@ const App = () => {
               <BlogForm onCreateBlog={ handleCreateBlog } />
             </Togglable>
             <hr />
-            <h2>Blogs</h2>
+            <div style={{ display: 'flex',  justifyContent: 'space-between' }}>
+              <h2>Blogs</h2>
+              <div>
+                <button onClick={ () => handleDesc('desc') } style={ desc ? activeStyle : null }>▼</button>
+                <button onClick={ () => handleDesc('asc') } style={ desc ? null : activeStyle }>▲</button>
+              </div>
+            </div>
             <div>
               { blogsForUI.map(blog => <Blog
                 key={ blog.id }
