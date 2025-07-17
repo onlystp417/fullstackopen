@@ -14,13 +14,21 @@ const create = async (payload, token) => {
   return res.data
 }
 
-const update = async (payload) => {
+const update = async (payload, token) => {
   const res = await axios.put(`${baseUrl}/${payload.id}`, payload)
   return res.data
+}
+
+const remove = async (id, token) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+  const res = await axios.delete(`${baseUrl}/${id}`, config)
 }
 
 export default {
   getAll,
   create,
-  update
+  update,
+  remove
 }

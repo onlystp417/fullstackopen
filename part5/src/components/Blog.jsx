@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, onUpdateBlog }) => {
+const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
   const [showDetail, setShowDetail] = useState(false)
   const hide = { display : 'none' }
   const show = { display: 'block' }
@@ -10,17 +10,25 @@ const Blog = ({ blog, onUpdateBlog }) => {
   const likeStyle= { border: 'none', backgroundColor: 'inherit', marginLeft: '5px', cursor: 'pointer' }
 
   const hanbleVisibility = () => { setShowDetail(!showDetail) }
+
   const handleLike = () => {
     const updateBlog = { ...blog, likes: blog.likes + 1 }
     delete updateBlog.user
     onUpdateBlog(updateBlog)
   }
 
+  const handleRemove = () => {
+    onRemoveBlog(blog)
+  }
+
   return (
     <div style={ blogStyle }>
       <div style={ header }>
         { blog.title }
-        <button onClick={ hanbleVisibility }>{ showDetail ? 'hide' : 'view' }</button>
+        <div>
+          <button onClick={ hanbleVisibility }>{ showDetail ? 'hide' : 'view' }</button>
+          <button style={{ marginLeft: '10px' }} onClick={ handleRemove }>🗑️</button>
+        </div>
       </div>
       <ul style={{ ...(showDetail ? show : hide), ...content }}>
         <li>Author: { blog.author }</li>

@@ -81,6 +81,17 @@ const App = () => {
     }
   }
 
+  const handleRemoveBlog = async (blog) => {
+    try {
+      await blogService.remove(blog.id, user.token)
+      const data = await blogService.getAll()
+      setBlogs(data)
+      handleNotify('success', `Delete blog: ${blog.title}`)
+    } catch(exception) {
+      handleNotify('', exception.response.data.error)
+    }
+  }
+
   const handleNotify = ( type, msg ) => {
     setNotifyMsg(msg)
     setNotifyType(type)
@@ -126,6 +137,7 @@ const App = () => {
                 key={ blog.id }
                 blog={ blog }
                 onUpdateBlog={ handleUpdateBlog }
+                onRemoveBlog={ handleRemoveBlog }
               />) }
             </div>
           </>
