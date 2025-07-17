@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -21,8 +21,12 @@ const App = () => {
 
     blogService
       .getAll()
-      .then(data => setBlogs(data))
+      .then(data => { setBlogs(data) })
   }, [])
+
+  const blogsForUI = useMemo(() => {
+    return blogs.map(blog => ({ ...blog, user }))
+  }, [blogs, user])
 
   const handleLogin = async (loginInfo) => {
     const { password, userName } = loginInfo
@@ -89,7 +93,10 @@ const App = () => {
               <BlogForm onCreateBlog={ handleCreateBlog } />
             </Togglable>
             <hr />
-            <Blog blogs={ blogs } />
+            <h2>Blogs</h2>
+            <div>
+              { blogsForUI.map(blog => <Blog key={ blog.id } blog={ blog } />) }
+            </div>
           </>
       }
     </div>
