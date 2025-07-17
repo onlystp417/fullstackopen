@@ -1,10 +1,10 @@
 const LoginForm = ({
-    password,
-    userName,
-    onSetPassword,
-    onSetUserName,
-    onLogin}) => {
-
+  password,
+  userName,
+  onSetPassword,
+  onSetUserName,
+  onLogin
+}) => {
   return (
     <form onSubmit={ onLogin }>
       <h2>Login</h2>

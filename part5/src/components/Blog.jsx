@@ -10,7 +10,7 @@ const Blog = ({ blogs }) => (
         ))
       }
     </ul>
-  </div>  
+  </div>
 )
 
 export default Blog

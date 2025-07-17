@@ -34,7 +34,7 @@ const App = () => {
     try {
       const data = await loginService.login({ password, userName })
       window.localStorage.setItem('user', JSON.stringify(data))
-      setUser(data) 
+      setUser(data)
       setUserName('')
       setPassword('')
       handleNotify('success', 'Login Success')
@@ -76,26 +76,26 @@ const App = () => {
     <div>
       <Notification message={ notifyMsg } type={ notifyType }/>
       {
-        !user ?
-        <LoginForm
-          password={ password }
-          userName={ userName }
-          onSetPassword = { setPassword }
-          onSetUserName = { setUserName }
-          onLogin={ handleLogin }
-        />
-        : <div>
-          {user && (
-            <p>
-              { `${user?.name} logged in ` }
-              <button onClick={ handleLogout }>log out</button>
-            </p>
-          )}
-          <hr />
-          <BlogForm onCreateBlog={ handleCreateBlog } />
-          <hr />
-          <Blog blogs={ blogs } />
-        </div>
+        !user
+          ? <LoginForm
+            password={ password }
+            userName={ userName }
+            onSetPassword = { setPassword }
+            onSetUserName = { setUserName }
+            onLogin={ handleLogin }
+          />
+          : <div>
+            {user && (
+              <p>
+                { `${user?.name} logged in ` }
+                <button onClick={ handleLogout }>log out</button>
+              </p>
+            )}
+            <hr />
+            <BlogForm onCreateBlog={ handleCreateBlog } />
+            <hr />
+            <Blog blogs={ blogs } />
+          </div>
       }
     </div>
   )
