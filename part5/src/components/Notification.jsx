@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const Notification = ({ type, message }) => {
   const style = {
     width: '100%',
@@ -12,6 +14,11 @@ const Notification = ({ type, message }) => {
   return (
     <div style={ style }>{ message }</div>
   )
+}
+
+Notification.propTypes = {
+  type: PropTypes.string,
+  message: PropTypes.string
 }
 
 export default Notification
