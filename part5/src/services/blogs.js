@@ -14,7 +14,13 @@ const create = async (payload, token) => {
   return res.data
 }
 
+const update = async (payload) => {
+  const res = await axios.put(`${baseUrl}/${payload.id}`, payload)
+  return res.data
+}
+
 export default {
   getAll,
-  create
+  create,
+  update
 }

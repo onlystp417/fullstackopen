@@ -40,7 +40,7 @@ const App = () => {
       setUser(data)
       handleNotify('success', 'Login Success')
     } catch(exception) {
-      handleNotify('', exception)
+      handleNotify('', exception.response.data.error)
     }
   }
 
@@ -59,8 +59,17 @@ const App = () => {
       setBlogs(blogs.concat([data]))
       handleNotify('success', `Blog ${data.title} created`)
     } catch(exception) {
-      alert(exception)
-      handleNotify('', exception)
+      handleNotify('', exception.response.data.error)
+    }
+  }
+
+  const handleUpdateBlog = async (newBlog) => {
+    try {
+      await blogService.update(newBlog)
+      const data = await blogService.getAll()
+      setBlogs(data)
+    } catch(exception) {
+      handleNotify('', exception.response.data.error)
     }
   }
 
@@ -95,7 +104,11 @@ const App = () => {
             <hr />
             <h2>Blogs</h2>
             <div>
-              { blogsForUI.map(blog => <Blog key={ blog.id } blog={ blog } />) }
+              { blogsForUI.map(blog => <Blog
+                key={ blog.id }
+                blog={ blog }
+                onUpdateBlog={ handleUpdateBlog }
+              />) }
             </div>
           </>
       }

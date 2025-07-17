@@ -39,7 +39,7 @@ blogRouter.post('/', tokenExtractor, async (req, res, next) => {
   res.status(201).json(savedBlog)
 })
 
-blogRouter.put('/:id', tokenExtractor, async (req, res, next) => {
+blogRouter.put('/:id', async (req, res, next) => {
   const updatedBlog = req.body
   const result = await Blog.findByIdAndUpdate(
     req.params.id,
