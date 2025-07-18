@@ -13,6 +13,7 @@ dist-ssr
 *.local
 .eslintrc.cjs
 vite.config.js
+coverage
 
 # Editor directories and files
 .vscode/*

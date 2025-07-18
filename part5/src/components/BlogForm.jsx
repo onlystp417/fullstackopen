@@ -18,6 +18,7 @@ const BlogForm = ({ onCreateBlog }) => {
         <div>
           <span>Title: </span>
           <input
+            placeholder='Title...'
             type="text"
             name="title"
             value={ title }
@@ -27,6 +28,7 @@ const BlogForm = ({ onCreateBlog }) => {
         <div>
           <span>Author: </span>
           <input
+            placeholder='Author...'
             type="text"
             name="author"
             value={ author }
@@ -36,6 +38,7 @@ const BlogForm = ({ onCreateBlog }) => {
         <div>
           <span>URL: </span>
           <input
+            placeholder='URL...'
             type="text"
             name="url"
             value={ url }
