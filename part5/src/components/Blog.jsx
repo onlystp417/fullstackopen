@@ -27,17 +27,17 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
       <div id={ blog.id } style={ header }>
         { blog.title }
         <div>
-          <button onClick={ hanbleVisibility }>{ showDetail ? 'hide' : 'view' }</button>
+          <button data-testid="view-btn" onClick={ hanbleVisibility }>{ showDetail ? 'hide' : 'view' }</button>
           <button style={{ marginLeft: '10px' }} onClick={ handleRemove }>🗑️</button>
         </div>
       </div>
-      <ul style={{ ...(showDetail ? show : hide), ...content }}>
+      <ul data-testid="detail" style={{ ...(showDetail ? show : hide), ...content }}>
         <li>Author: { blog.author }</li>
-        <li data-testid="blog-likes">
+        <li>
           Likes: { blog.likes }
-          <button style={ likeStyle } onClick={ handleLike }>👍</button>
+          <button data-testid="likes-btn" style={ likeStyle } onClick={ handleLike }>👍</button>
         </li>
-        <li data-testid="blog-url">URL: { blog.url }</li>
+        <li>URL: { blog.url }</li>
         <p>{ blog.user.name }</p>
       </ul>
     </div>
