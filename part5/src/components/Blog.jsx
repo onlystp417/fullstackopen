@@ -33,11 +33,11 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
       </div>
       <ul style={{ ...(showDetail ? show : hide), ...content }}>
         <li>Author: { blog.author }</li>
-        <li>
+        <li data-testid="blog-likes">
           Likes: { blog.likes }
           <button style={ likeStyle } onClick={ handleLike }>👍</button>
         </li>
-        <li>URL: { blog.url }</li>
+        <li data-testid="blog-url">URL: { blog.url }</li>
         <p>{ blog.user.name }</p>
       </ul>
     </div>

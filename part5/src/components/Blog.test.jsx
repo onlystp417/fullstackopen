@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('Test Blog element', () => {
@@ -19,5 +20,23 @@ describe('Test Blog element', () => {
     const element = container.querySelector('#blog1')
 
     expect(element).toHaveTextContent('Happy ever after')
+  })
+
+  test('clicking view-button shows likes and url info"', () => {
+    let likesElement = screen.queryByTestId('blog-likes')
+    let urlElement = screen.queryByTestId('blog-url')
+
+    expect(likesElement).toBeNull()
+    expect(urlElement).toBeNull()
+
+    const viewBtn = screen.queryByTestId('view-btn')
+    const user = userEvent.setup()
+    user.click(viewBtn)
+
+    likesElement = screen.queryByTestId('blog-likes')
+    urlElement = screen.queryByTestId('blog-url')
+
+    expect(likesElement).toBeDefined()
+    expect(urlElement).toBeDefined()
   })
 })
