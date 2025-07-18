@@ -24,7 +24,7 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
 
   return (
     <div style={ blogStyle }>
-      <div style={ header }>
+      <div id={ blog.id } style={ header }>
         { blog.title }
         <div>
           <button onClick={ hanbleVisibility }>{ showDetail ? 'hide' : 'view' }</button>
