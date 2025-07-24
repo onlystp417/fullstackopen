@@ -1,14 +1,34 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
 const { describe, beforeEach } = test
+import helper from '../helper'
 
 describe('when login', () => {
-  beforeEach(async ({ page }) => {
+  beforeEach(async ({ page, request }) => {
+    await helper.initData(request)
     await page.goto('http://localhost:5173/');
   });
 
   test('Login form is shown', async ({ page }) => {
     await expect(page.getByRole('button', { name: 'Login' })).toBeVisible()
+  })
+
+  test('login with correct credentials', async({ page }) => {
+    const { userName, password, name } = helper.initialUser
+    await page.getByRole('textbox').first().fill(userName)
+    await page.getByRole('textbox').last().fill(password)
+    await page.getByRole('button', { name: 'Login' }).click()
+
+    await expect(page.getByText(`${name} logged in`)).toBeVisible()
+  })
+
+  test('Login with wrong password', async({ page }) => {
+    const { userName } = helper.initialUser
+    await page.getByRole('textbox').first().fill(userName)
+    await page.getByRole('textbox').last().fill('wrong password')
+    await page.getByRole('button', { name: 'Login' }).click()
+
+    await expect(page.getByText(`Invalid username or password`)).toBeVisible()
   })
 
   // test('has title', async ({ page }) => {
