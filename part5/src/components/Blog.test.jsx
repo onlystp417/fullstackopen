@@ -22,17 +22,15 @@ describe('Test Blog component', () => {
     expect(element).toHaveTextContent('Happy ever after')
   })
 
-  test('clicking view-button shows likes and url info"', async () => {
+  test('clicking view-button shows likes and url info', async () => {
     render(
       <Blog blog={blog} onUpdateBlog={() => {}} onRemoveBlog={() => {}} />
     )
 
     let blogDetail = screen.queryByTestId('detail')
-
     expect(blogDetail).toHaveStyle('display: none')
 
     const viewBtn = screen.getByText('view')
-
     await user.click(viewBtn)
 
     blogDetail = screen.queryByTestId('detail')
@@ -53,7 +51,6 @@ describe('Test Blog component', () => {
 
     await user.click(likesBtn)
     await user.click(likesBtn)
-
 
     expect(mockHandler.mock.calls).toHaveLength(2)
   })
