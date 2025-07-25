@@ -55,6 +55,7 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('user')
     setUser(null)
+    window.location.reload()
   }
 
   const handleCreateBlog = async (newBlog) => {

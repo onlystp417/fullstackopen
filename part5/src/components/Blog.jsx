@@ -22,13 +22,21 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
     onRemoveBlog(blog)
   }
 
+  const isDeleteBtnVisible = () => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    return user.token === blog.user.token
+  }
+
   return (
     <div style={ blogStyle }>
-      <div role="blogTitle" id={ blog.id } style={ header }>
+      <div id={ blog.id } style={ header }>
         { blog.title }
         <div>
           <button data-testid="view-btn" onClick={ hanbleVisibility }>{ showDetail ? 'hide' : 'view' }</button>
-          <button style={{ marginLeft: '10px' }} onClick={ handleRemove }>🗑️</button>
+          <button
+            data-testid="delete-btn"
+            style={{ ...(isDeleteBtnVisible ? show : hide), marginLeft: '10px' }}
+            onClick={ handleRemove }>🗑️</button>
         </div>
       </div>
       <ul data-testid="detail" style={{ ...(showDetail ? show : hide), ...content }}>
