@@ -11,7 +11,17 @@ const initData = async (req) => {
   })
 }
 
+const login = async(page) => {
+  const { userName, password, name } = initialUser
+    await page.getByRole('textbox').first().fill(userName)
+    await page.getByRole('textbox').last().fill(password)
+    await page.getByRole('button', { name: 'Login' }).click()
+
+    return name
+}
+
 module.exports = {
   initialUser,
-  initData
+  initData,
+  login
 }
