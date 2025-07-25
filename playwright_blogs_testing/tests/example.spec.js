@@ -48,22 +48,20 @@ describe('when login', () => {
       }, 1000)
     })
 
-    // test('Delete btn invisible to non-author', async ({ page, request }) => {
-    //   const newUser = {
-    //     name: 'Jinwen Hsieh',
-    //     userName: 'onlystp',
-    //     password: 'bilibala7788'
-    //   }
-    //   await page.getByRole('button', { name: 'log out'})
-    //   await request.post('http://localhost:3001/api/users', { data: newUser })
+    test('Delete btn invisible to non-author', async ({ page, request }) => {
+      const newUser = {
+        name: 'Jinwen Hsieh',
+        userName: 'onlystp',
+        password: 'bilibala7788'
+      }
+      await page.getByRole('button', { name: 'log out'}).click()
+      await request.post('http://localhost:3001/api/users', { data: newUser })
 
-    //   await page.getByRole('textbox').first().fill(newUser.userName)
-    //   await page.getByRole('textbox').last().fill(newUser.password)
-    //   await page.getByRole('button', { name: 'Login' }).click()
+      await page.getByRole('textbox').first().fill(newUser.userName)
+      await page.getByRole('textbox').last().fill(newUser.password)
+      await page.getByRole('button', { name: 'Login' }).click()
 
-    //   await page.get
-    //   return name
-
-    // })
+      expect(await page.getByText('New Blog 1').getByTestId('delete-btn')).toHaveCount(0)
+    })
   })
 })
