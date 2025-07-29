@@ -30,7 +30,8 @@ describe('when login', () => {
   describe('Logged in, and do...', () => {
     beforeEach(async ({ page }) => {
       await helper.login(page)
-      await helper.addBlog(page)
+      await page.getByRole('button', { name: 'Add blog' }).click()
+      await helper.addBlog(page, helper.initialBlog)
     })
 
     test('Blog can be added and liked', async ({ page }) => {
@@ -43,9 +44,8 @@ describe('when login', () => {
 
     test('Blog can be deleted by author', async ({ page }) => {
       await page.getByText('New Blog 1').getByTestId('delete-btn').click()
-      setTimeout(async () => {
-        expect(await page.getByText('New Blog 1').getByRole('button', { name: 'view' })).toHaveCount(0)
-      }, 1000)
+      const newBlog = await page.getByText('New Blog 1')
+      await expect(newBlog.getByRole('button', { name: 'view' })).toHaveCount(0)
     })
 
     test('Delete btn invisible to non-author', async ({ page, request }) => {
@@ -61,7 +61,35 @@ describe('when login', () => {
       await page.getByRole('textbox').last().fill(newUser.password)
       await page.getByRole('button', { name: 'Login' }).click()
 
-      expect(await page.getByText('New Blog 1').getByTestId('delete-btn')).toHaveCount(0)
+      await expect(page.getByText('New Blog 1').getByTestId('delete-btn')).toHaveCount(0)
+    })
+
+    test('Blogs to be sorted correctly', async ({ page }) => {
+      const newBlogs = [
+        { title: 'New Blog 2', author: 'GengBai Lin', url: 'blogs/2', likes: 9 },
+        { title: 'New Blog 3', author: 'GengBai Lin', url: 'blogs/3', likes: 4 },
+        { title: 'New Blog 4', author: 'GengBai Lin', url: 'blogs/4', likes: 20 },
+        { title: 'New Blog 5', author: 'GengBai Lin', url: 'blogs/5', likes: 17 },
+      ]
+
+      for (const blog of newBlogs) {
+        await helper.addBlog(page, blog)
+      }
+
+      for(let i=1; i<=15; i++) {
+        const index = Math.floor(Math.random() * 5)
+        // console.log('index', index)
+        const blogTitle = newBlogs[index].title
+        const blog = await page.getByText(blogTitle)
+        await blog.getByRole('button', { name: 'view' }).click()
+        await blog.locator('..').getByTestId('likes-btn').click()
+        // console.log('title', blogTitle)
+      }
+
+      const blogLocators = await page.locator('.blog')
+      const blogs = await blogLocators.evaluateAll(blogElements =>
+        blogElements.map(el => el.textContent)
+      )
     })
   })
 })

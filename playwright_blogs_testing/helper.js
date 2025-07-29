@@ -4,6 +4,12 @@ const initialUser = {
   password: 'asabulu8877'
 }
 
+const initialBlog = {
+  title: 'New Blog 1',
+  author: 'GengBai Lin',
+  url: 'blogs/1'
+}
+
 const initData = async (req) => {
   await req.post('http://localhost:3001/api/testing/reset')
   await req.post('http://localhost:3001/api/users', {
@@ -21,15 +27,19 @@ const login = async(page) => {
 }
 
 const addBlog = async(page, payload) => {
-  await page.getByRole('button', { name: 'Add blog' }).click()
-  await page.getByText('Title: ').locator('..').getByRole('textbox').fill('New Blog 1')
-  await page.getByText('Author: ').locator('..').getByRole('textbox').fill('GengBai Lin')
-  await page.getByText('URL: ').locator('..').getByRole('textbox').fill('medium.com/new_blog_1')
+  const { title, author, url } = payload
+  await page.getByText('Title: ').locator('..').getByRole('textbox').fill(title)
+  await page.getByText('Author: ').locator('..').getByRole('textbox').fill(author)
+  await page.getByText('URL: ').locator('..').getByRole('textbox').fill(url)
   await page.getByRole('button', { name: 'Create' }).click()
+
+  // 等待 blog 出現在列表中，再繼續（假設用 title 判斷是否新增成功）
+  await page.waitForSelector(`text=${title}` , { timeout: 500 })
 }
 
 module.exports = {
   initialUser,
+  initialBlog,
   initData,
   login,
   addBlog

@@ -28,7 +28,7 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
   }
 
   return (
-    <div style={ blogStyle }>
+    <div className="blog" style={ blogStyle }>
       <div id={ blog.id } style={ header }>
         { blog.title }
         <div>

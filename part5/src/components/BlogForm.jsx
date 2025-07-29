@@ -9,6 +9,9 @@ const BlogForm = ({ onCreateBlog }) => {
   const handleCreate = e => {
     e.preventDefault()
     onCreateBlog({ title, url, author })
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
   return (
