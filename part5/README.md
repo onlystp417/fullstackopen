@@ -1,8 +1,13 @@
-# React + Vite
+# Programming a server with NodeJS and Express
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Info
+This [section](https://fullstackopen.com/en/part5) introduces the frontend login feature, blog CRUD via RESTful API, and testing with Vitest (integration via jsdom) and Playwright (E2E).
 
-Currently, two official plugins are available:
+## Exercises:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| Excercises |         Topic          |
+| --------   |        -------         |
+| 5.1 - 5.4  |  Login in Frontend           |
+| 5.5 - 5.11 |  Create, Update, and Delete Blog    |
+| 5.13 - 5.16|  Refactor and Integration Testing      |
+| 5.17 - 5.23|  E2E Testing      |

@@ -38,3 +38,10 @@ View [Exercise](./part4/README.md)
 2. Testing the backend
 3. User administration
 4. Token authentication
+
+### Part 5 - Testing React Apps
+View [Exercise](./part5/README.md)
+1. Login in frontend
+2. props.children and proptypes
+3. Testing React apps
+4. End to end testing: Playwright
