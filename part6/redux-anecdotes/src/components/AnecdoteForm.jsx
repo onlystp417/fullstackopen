@@ -11,15 +11,18 @@ const AnecdoteForm = ({ onCreate }) => {
   }
 
   return (
-    <form onSubmit={ addAnecdote }>
-      <div>
-        <input
-          name="name"
-          onChange={e => setAnecdoteName(e.target.value)}
-          value={anecdoteName} />
-      </div>
-      <button type="submit">create</button>
-    </form>
+    <>
+      <h2>create new</h2>
+      <form onSubmit={ addAnecdote }>
+        <div>
+          <input
+            name="name"
+            onChange={e => setAnecdoteName(e.target.value)}
+            value={anecdoteName} />
+        </div>
+        <button type="submit">create</button>
+      </form>
+    </>
   )
 }
 
