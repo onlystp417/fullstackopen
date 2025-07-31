@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { notifyWithTimeout } from '../reducers/notificationReducer'
 import { updateAnecdote, fetchAnecdotes } from '../reducers/anecdoteReducer'
-import anecdoteService from '../services/anecdote'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
@@ -15,11 +14,7 @@ const AnecdoteList = () => {
   
 
   const handleVote = async anecdote => {
-    const data = await anecdoteService.updateOne(anecdote.id, {
-      ...anecdote,
-      votes: anecdote.votes + 1
-    })
-    dispatch(updateAnecdote(data))
+    dispatch(updateAnecdote(anecdote))
     dispatch(notifyWithTimeout(`You voted ${anecdote.content}`))
   }
 
@@ -30,7 +25,7 @@ const AnecdoteList = () => {
         return regex.test(anecdote.content)
       })
     return filteredAnecdotes.sort((a, b) => b.votes - a.votes)
-}
+  }
 
   return (
     anecdotes.map(anecdote =>
