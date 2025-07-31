@@ -8,10 +8,11 @@ const AnecdoteList = () => {
   const dispatch = useDispatch()
   const filter = useSelector(state => state.filter)
   const anecdotes = useSelector(state => anecdotesForUI(state))
-
+  
   useEffect(() => {
-    fetchAnecdotes()
+    dispatch(fetchAnecdotes())
   }, [])
+  
 
   const handleVote = async anecdote => {
     const data = await anecdoteService.updateOne(anecdote.id, {

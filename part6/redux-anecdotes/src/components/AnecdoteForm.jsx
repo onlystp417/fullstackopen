@@ -2,17 +2,15 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { notifyWithTimeout } from '../reducers/notificationReducer'
-import anecdoteService from '../services/anecdote'
 import PropTypes from 'prop-types'
 
 const AnecdoteForm = () => {
   const [anecdoteName, setAnecdoteName] = useState('')
   const dispatch = useDispatch()
 
-  const addAnecdote = async e => {
+  async function addAnecdote(e) {
     e.preventDefault()
-    const data = await anecdoteService.createOne(anecdoteName)
-    dispatch(createAnecdote(data))
+    await dispatch(createAnecdote(anecdoteName))
     setAnecdoteName('')
     dispatch(notifyWithTimeout('Add anecdote successfully!'))
   }
