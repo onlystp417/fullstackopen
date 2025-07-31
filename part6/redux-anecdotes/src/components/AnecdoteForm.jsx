@@ -1,13 +1,18 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createAnecdote } from '../reducers/anecdoteReducer'
+import { notifyWithTimeout } from '../reducers/notificationReducer'
 import PropTypes from 'prop-types'
 
-const AnecdoteForm = ({ onCreate }) => {
+const AnecdoteForm = () => {
   const [anecdoteName, setAnecdoteName] = useState('')
+  const dispatch = useDispatch()
 
   const addAnecdote = e => {
     e.preventDefault()
-    onCreate(anecdoteName)
+    dispatch(createAnecdote(anecdoteName))
     setAnecdoteName('')
+    dispatch(notifyWithTimeout('Add anecdote successfully!'))
   }
 
   return (

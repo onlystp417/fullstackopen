@@ -1,5 +1,4 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { voteAnecdotes, createAnecdote } from './reducers/anecdoteReducer'
 import { filterAnecdotes } from './reducers/filterReducer'
 import AnecdoteForm from './components/AnecdoteForm'
 import AnecdoteList from './components/AnecdoteList'
@@ -29,11 +28,8 @@ const App = () => {
       />
       <AnecdoteList
         anecdotes={ anecdotes }
-        onVote={ id => dispatch(voteAnecdotes(id)) }
       />
-      <AnecdoteForm
-        onCreate={value => dispatch(createAnecdote(value) )}
-      />
+      <AnecdoteForm />
     </div>
   )
 }

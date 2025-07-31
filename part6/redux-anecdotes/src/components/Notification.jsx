@@ -8,12 +8,12 @@ const Notification = () => {
     borderRadius: '5px',
     padding: 10,
     borderWidth: 1,
-    display: notification.visible ? 'block' : 'none',
+    display: notification ? 'block' : 'none',
   }
 
   return (
     <div style={style}>
-      { notification.msg }
+      { notification }
     </div>
   )
 }
