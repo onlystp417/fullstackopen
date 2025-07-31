@@ -1,12 +1,17 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { notifyWithTimeout } from '../reducers/notificationReducer'
-import { updateAnecdote } from '../reducers/anecdoteReducer'
+import { updateAnecdote, fetchAnecdotes } from '../reducers/anecdoteReducer'
 import anecdoteService from '../services/anecdote'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
   const filter = useSelector(state => state.filter)
   const anecdotes = useSelector(state => anecdotesForUI(state))
+
+  useEffect(() => {
+    fetchAnecdotes()
+  }, [])
 
   const handleVote = async anecdote => {
     const data = await anecdoteService.updateOne(anecdote.id, {
