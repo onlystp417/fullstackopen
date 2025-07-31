@@ -1,18 +1,17 @@
-import { useRef } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const AnecdoteFilter = ({ onFilter }) => {
-  const keyword = useRef('') // useRef prevent re-rendering on keyword updates
+  const [keyword, setKeyword] = useState('') // useRef prevent re-rendering on keyword updates
 
   const handleFilter = e => {
-    console.log(e.target.value)
-    keyword.current = e.target.value
-    onFilter(keyword.current)
+    setKeyword(e.target.value)
+    onFilter(keyword)
   }
 
   const restKeyword = () => {
-    keyword.current = ''
-    onFilter(keyword.current)
+    setKeyword('')
+    onFilter('')
   }
 
   return (
@@ -21,7 +20,7 @@ const AnecdoteFilter = ({ onFilter }) => {
       <input
         type="text"
         name="keyword"
-        value={ keyword.current }
+        value={ keyword }
         onChange={ handleFilter }
       />
       <button onClick={ restKeyword }>X</button>
