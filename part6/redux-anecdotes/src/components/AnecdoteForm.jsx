@@ -1,12 +1,17 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { createAnecdote } from '../reducers/anecdoteReducer'
+import { createAnecdote, setAnecdotes } from '../reducers/anecdoteReducer'
 import { notifyWithTimeout } from '../reducers/notificationReducer'
+import anecdoteService from '../services/anecdote'
 import PropTypes from 'prop-types'
 
 const AnecdoteForm = () => {
   const [anecdoteName, setAnecdoteName] = useState('')
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    anecdoteService.getAll().then(data => dispatch(setAnecdotes(data)))
+  }, [])
 
   const addAnecdote = e => {
     e.preventDefault()
