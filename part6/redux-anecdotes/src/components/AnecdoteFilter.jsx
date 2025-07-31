@@ -1,17 +1,20 @@
 import { useState } from 'react'
+import { filterAnecdotes } from '../reducers/filterReducer'
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
-const AnecdoteFilter = ({ onFilter }) => {
+const AnecdoteFilter = () => {
+  const dispatch = useDispatch()
   const [keyword, setKeyword] = useState('') // useRef prevent re-rendering on keyword updates
 
   const handleFilter = e => {
     setKeyword(e.target.value)
-    onFilter(keyword)
+    dispatch(filterAnecdotes(keyword))
   }
 
   const restKeyword = () => {
     setKeyword('')
-    onFilter('')
+    dispatch(filterAnecdotes(''))
   }
 
   return (

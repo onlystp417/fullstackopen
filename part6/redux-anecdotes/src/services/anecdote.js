@@ -7,6 +7,24 @@ const getAll = async () => {
   return res.data
 }
 
+const createOne = async payload => {
+  const res = await axios.post(baseUrl, {
+    id: getId(),
+    content: payload,
+    votes: 0
+  })
+  return res.data
+}
+
+const updateOne = async (id, payload) => {
+  const res = await axios.put(`${baseUrl}/${id}`, payload)
+  return res.data
+}
+
+const getId = () => (100000 * Math.random()).toFixed(0)
+
 export default {
-  getAll
+  getAll,
+  createOne,
+  updateOne
 }

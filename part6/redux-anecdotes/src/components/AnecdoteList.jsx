@@ -1,14 +1,30 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { notifyWithTimeout } from '../reducers/notificationReducer'
-import { voteAnecdotes } from '../reducers/anecdoteReducer'
+import { updateAnecdote } from '../reducers/anecdoteReducer'
+import anecdoteService from '../services/anecdote'
 
-const AnecdoteList = ({ anecdotes }) => {
+const AnecdoteList = () => {
   const dispatch = useDispatch()
+  const filter = useSelector(state => state.filter)
+  const anecdotes = useSelector(state => anecdotesForUI(state))
 
-  const handleVote = anecdote => {
-    dispatch(voteAnecdotes(anecdote.id))
+  const handleVote = async anecdote => {
+    const data = await anecdoteService.updateOne(anecdote.id, {
+      ...anecdote,
+      votes: anecdote.votes + 1
+    })
+    dispatch(updateAnecdote(data))
     dispatch(notifyWithTimeout(`You voted ${anecdote.content}`))
   }
+
+  function anecdotesForUI(state) {
+    const filteredAnecdotes = state.anecdotes
+      .filter(anecdote => {
+        const regex = new RegExp(filter, "i")
+        return regex.test(anecdote.content)
+      })
+    return filteredAnecdotes.sort((a, b) => b.votes - a.votes)
+}
 
   return (
     anecdotes.map(anecdote =>

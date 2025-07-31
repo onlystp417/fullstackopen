@@ -13,9 +13,10 @@ const AnecdoteForm = () => {
     anecdoteService.getAll().then(data => dispatch(setAnecdotes(data)))
   }, [])
 
-  const addAnecdote = e => {
+  const addAnecdote = async e => {
     e.preventDefault()
-    dispatch(createAnecdote(anecdoteName))
+    const data = await anecdoteService.createOne(anecdoteName)
+    dispatch(createAnecdote(data))
     setAnecdoteName('')
     dispatch(notifyWithTimeout('Add anecdote successfully!'))
   }
