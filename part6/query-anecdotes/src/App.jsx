@@ -36,7 +36,7 @@ const App = () => {
       <h3>Anecdote app</h3>
     
       <Notification ref={NotificationRef} />
-      <AnecdoteForm />
+      <AnecdoteForm onHandleNotify={handleNotify} />
     
       {anecdotesQuery.data?.map(anecdote =>
         <div key={anecdote.id}>
