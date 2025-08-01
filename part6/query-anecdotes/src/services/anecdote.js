@@ -9,7 +9,12 @@ async function create(payload) {
   return await axios.post(baseUrl, payload).then(res => res.data)
 }
 
+async function update(payload) {
+  return await axios.put(`${baseUrl}/${payload.id}`, payload).then(res => res.data)
+}
+
 export default {
   getAll,
-  create
+  create,
+  update
 }

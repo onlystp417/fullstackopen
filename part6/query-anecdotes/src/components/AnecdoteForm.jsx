@@ -4,7 +4,7 @@ import anecdoteService from '../services/anecdote'
 const AnecdoteForm = ({ onHandleNotify }) => {
   const queryClient = useQueryClient()
 
-  const anecdoteMutation = useMutation({
+  const newAnecdoteMutation = useMutation({
     mutationFn: anecdoteService.create,
     onSuccess: newAnecdote => {
       const anecdotes = queryClient.getQueryData(['anecdotes'])
@@ -16,15 +16,15 @@ const AnecdoteForm = ({ onHandleNotify }) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    anecdoteMutation.mutate({
+    newAnecdoteMutation.mutate({
       content: content,
       id: Date.now(),
       votes: 0
     })
   }
 
-  if(anecdoteMutation.isError) {
-    onHandleNotify(anecdoteMutation.error.response.data.error)
+  if(newAnecdoteMutation.isError) {
+    onHandleNotify(newAnecdoteMutation.error.response.data.error)
   }
 
   return (
