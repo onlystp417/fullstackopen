@@ -1,7 +1,7 @@
-import { useState, forwardRef, useImperativeHandle } from 'react'
+import { useNotificationValue } from '../contexts/notificationContext'
 
-const Notification = forwardRef((props, ref) => {
-  const [msg, setMsg] = useState('')
+const Notification = () => {
+  const notificationMsg = useNotificationValue()
 
   const style = {
     border: 'solid',
@@ -9,20 +9,14 @@ const Notification = forwardRef((props, ref) => {
     borderWidth: 1,
     marginBottom: 5
   }
-
-  useImperativeHandle(ref, () => ({
-    onSetMsg: message => setMsg(message)
-  }))
   
-  if (!msg) return null
+  if (!notificationMsg) return null
 
   return (
     <div style={style}>
-      { msg }
+      { notificationMsg }
     </div>
   )
-})
-
-Notification.displayName = 'Notification'
+}
 
 export default Notification
