@@ -9,8 +9,7 @@ const AnecdoteList = () => {
   const invisible = { display: 'none' }
 
   useEffect(() => {
-    const {state} = location
-    console.log('content', location)
+    const { state } = location
     if(!state)
       return
     setNotify(`"${state.content}" succesfully created!`)
