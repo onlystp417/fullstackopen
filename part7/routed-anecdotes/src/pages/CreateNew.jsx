@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useContext } from "react"
+import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router'
 import AnecdoteContext from "../context/AnexdoteContext"
 
 const CreateNew = () => {
@@ -7,6 +7,7 @@ const CreateNew = () => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -18,6 +19,7 @@ const CreateNew = () => {
       votes: 0
     })
     resetForm()
+    navigate('/', { state: { content } })
   }
 
   const resetForm = () => {

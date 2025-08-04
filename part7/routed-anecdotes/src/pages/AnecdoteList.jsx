@@ -1,9 +1,21 @@
-import { useContext } from "react"
+import { useState, useEffect, useContext } from "react"
 import AnecdoteContext from "../context/AnexdoteContext"
-import { Link } from "react-router"
+import { Link, useLocation } from "react-router"
 
 const AnecdoteList = () => {
+  const location = useLocation()
+  const [ notify, setNotify ] = useState('')
   const { anecdotes } = useContext(AnecdoteContext)
+  const invisible = { display: 'none' }
+
+  useEffect(() => {
+    const {state} = location
+    console.log('content', location)
+    if(!state)
+      return
+    setNotify(`"${state.content}" succesfully created!`)
+    setTimeout(() => { setNotify('') }, 5000)
+  }, [location])
 
   // const anecdoteById = (id) =>
   //   anecdotes.find(a => a.id === id)
@@ -21,6 +33,7 @@ const AnecdoteList = () => {
 
   return (
     <div>
+      <p style={ notify ? null : invisible }>{ notify }</p>
       <h2>Anecdotes</h2>
       <ul>
         {anecdotes?.map(anecdote => (
