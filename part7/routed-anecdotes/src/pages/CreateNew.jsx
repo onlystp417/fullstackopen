@@ -11,6 +11,7 @@ const CreateNew = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     addNew({
+      id: Date.now(),
       content,
       author,
       info,
