@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { notifyWithTimeout } from './reducers/notificationReducer'
+import { setBlogs, createBlogs, updateBlogs, deleteBlog } from './reducers/blogsReducer'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -10,10 +11,10 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [desc, setDesc] = useState(true)
   const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blogs)
 
   const activeStyle = { backgroundColor: '#292e2a', color: 'white' }
 
@@ -25,7 +26,7 @@ const App = () => {
 
     blogService
       .getAll()
-      .then(data => { setBlogs(data) })
+      .then(data => { dispatch(setBlogs(data)) })
   }, [])
 
   const blogsForUI = useMemo(() => {
@@ -65,7 +66,7 @@ const App = () => {
 
     try {
       const data = await blogService.create(newBlog, user.token)
-      setBlogs(blogs.concat([data]))
+      dispatch(createBlogs(data))
       dispatch(notifyWithTimeout({ type: 'success', message: `Blog ${data.title} created` }))
     } catch(exception) {
       dispatch(notifyWithTimeout({ type: '', message: exception.response.data.error }))
@@ -74,9 +75,8 @@ const App = () => {
 
   const handleUpdateBlog = async (newBlog) => {
     try {
-      await blogService.update(newBlog)
-      const data = await blogService.getAll()
-      setBlogs(data)
+      const data = await blogService.update(newBlog)
+      dispatch(updateBlogs(data))
     } catch(exception) {
       dispatch(notifyWithTimeout({ type: '', message: exception.response.data.error }))
     }
@@ -85,8 +85,7 @@ const App = () => {
   const handleRemoveBlog = async (blog) => {
     try {
       await blogService.remove(blog.id, user.token)
-      const data = await blogService.getAll()
-      setBlogs(data)
+      dispatch(deleteBlog(blog))
       dispatch(notifyWithTimeout({ type: 'success', message: `Delete blog: ${blog.title}` }))
     } catch(exception) {
       dispatch(notifyWithTimeout({ type: '', message: exception.response.data.error }))
