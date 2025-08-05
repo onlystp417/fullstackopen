@@ -13,7 +13,8 @@ const AnecdoteList = () => {
     if(!state)
       return
     setNotify(`"${state.content}" succesfully created!`)
-    setTimeout(() => { setNotify('') }, 5000)
+    const timeOutId = setTimeout(() => { setNotify('') }, 5000)
+    return () => { clearTimeout(timeOutId) }
   }, [location])
 
   // const anecdoteById = (id) =>
