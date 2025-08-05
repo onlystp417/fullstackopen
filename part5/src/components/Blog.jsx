@@ -46,7 +46,7 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
           <button data-testid="likes-btn" style={ likeStyle } onClick={ handleLike }>👍</button>
         </li>
         <li>URL: { blog.url }</li>
-        <p>{ blog.user.name }</p>
+        <p>{ blog.loginUser.name }</p>
       </ul>
     </div>
   )

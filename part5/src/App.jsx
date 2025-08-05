@@ -1,20 +1,24 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { notifyWithTimeout } from './reducers/notificationReducer'
 import { setBlogs, createBlogs, updateBlogs, deleteBlog } from './reducers/blogsReducer'
+import { setLoginUser, resetLoginUser } from './reducers/loginUserReducer'
+
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
+
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const [desc, setDesc] = useState(true)
   const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs)
+  const loginUser = useSelector(state => state.loginUser)
 
   const activeStyle = { backgroundColor: '#292e2a', color: 'white' }
 
@@ -22,7 +26,7 @@ const App = () => {
     const userInfo = JSON.parse(window.localStorage.getItem('user'))
     if(!userInfo) return
 
-    setUser(userInfo)
+    dispatch(setLoginUser(userInfo))
 
     blogService
       .getAll()
@@ -35,8 +39,8 @@ const App = () => {
         ? b.likes - a.likes // desc
         : a.likes - b.likes // asc
     })
-    return sorted.map(blog => ({ ...blog, user }))
-  }, [blogs, user, desc])
+    return sorted.map(blog => ({ ...blog, loginUser }))
+  }, [blogs, loginUser, desc])
 
   const handleLogin = async (loginInfo) => {
     const { password, userName } = loginInfo
@@ -47,7 +51,7 @@ const App = () => {
     try {
       const data = await loginService.login({ password, userName })
       window.localStorage.setItem('user', JSON.stringify(data))
-      setUser(data)
+      dispatch(setLoginUser(data))
       dispatch(notifyWithTimeout({ type: 'success', message: 'Login Success' }))
     } catch(exception) {
       dispatch(notifyWithTimeout({ type: '', message: exception.response.data.error }))
@@ -56,7 +60,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('user')
-    setUser(null)
+    dispatch(resetLoginUser())
   }
 
   const handleCreateBlog = async (newBlog) => {
@@ -65,7 +69,7 @@ const App = () => {
       return dispatch(notifyWithTimeout({ type: '', message: 'Blog imformation are required' }))
 
     try {
-      const data = await blogService.create(newBlog, user.token)
+      const data = await blogService.create(newBlog, loginUser.token)
       dispatch(createBlogs(data))
       dispatch(notifyWithTimeout({ type: 'success', message: `Blog ${data.title} created` }))
     } catch(exception) {
@@ -84,7 +88,7 @@ const App = () => {
 
   const handleRemoveBlog = async (blog) => {
     try {
-      await blogService.remove(blog.id, user.token)
+      await blogService.remove(blog.id, loginUser.token)
       dispatch(deleteBlog(blog))
       dispatch(notifyWithTimeout({ type: 'success', message: `Delete blog: ${blog.title}` }))
     } catch(exception) {
@@ -98,7 +102,7 @@ const App = () => {
 
   const loggedTemplate = () => (
     <p>
-      { `${user?.name} logged in ` }
+      { `${loginUser.name} logged in ` }
       <button onClick={ handleLogout }>log out</button>
     </p>
   )
@@ -107,10 +111,10 @@ const App = () => {
     <div>
       <Notification />
       {
-        !user
+        !loginUser.token
           ? <LoginForm onLogin={ handleLogin } />
           : <>
-            {user && loggedTemplate() }
+            {loginUser.token && loggedTemplate() }
             <hr />
             <Togglable buttonLable="Add blog">
               <BlogForm onCreateBlog={ handleCreateBlog } />
