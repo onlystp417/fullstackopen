@@ -13,7 +13,7 @@ const App = () => {
     noteService.create({ content: content.value })
     content.onReset()
   }
- 
+
   const handlePersonSubmit = (event) => {
     event.preventDefault()
     personService.create({ name: name.value, number: number.value})

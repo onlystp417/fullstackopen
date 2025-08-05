@@ -1,4 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useDispatch } from 'react-redux'
+import { notifyWithTimeout } from './reducers/notificationReducer'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -10,9 +12,8 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [notifyType, setNotifyType] = useState('')
-  const [notifyMsg, setNotifyMsg] = useState('')
   const [desc, setDesc] = useState(true)
+  const dispatch = useDispatch()
 
   const activeStyle = { backgroundColor: '#292e2a', color: 'white' }
 
@@ -40,35 +41,34 @@ const App = () => {
     const { password, userName } = loginInfo
 
     if(!password || !userName)
-      handleNotify('', 'User name and Password required')
+      dispatch(notifyWithTimeout({ type: '', message: 'User name and Password required' }))
 
     try {
       const data = await loginService.login({ password, userName })
       window.localStorage.setItem('user', JSON.stringify(data))
       setUser(data)
-      handleNotify('success', 'Login Success')
+      dispatch(notifyWithTimeout({ type: 'success', message: 'Login Success' }))
     } catch(exception) {
-      handleNotify('', exception.response.data.error)
+      dispatch(notifyWithTimeout({ type: '', message: exception.response.data.error }))
     }
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('user')
     setUser(null)
-    // window.location.reload()
   }
 
   const handleCreateBlog = async (newBlog) => {
     const { title, author, url } = newBlog
     if(!title || !author || !url)
-      return handleNotify('', 'Blog imformation are required')
+      return dispatch(notifyWithTimeout({ type: '', message: 'Blog imformation are required' }))
 
     try {
       const data = await blogService.create(newBlog, user.token)
       setBlogs(blogs.concat([data]))
-      handleNotify('success', `Blog ${data.title} created`)
+      dispatch(notifyWithTimeout({ type: 'success', message: `Blog ${data.title} created` }))
     } catch(exception) {
-      handleNotify('', exception.response.data.error)
+      dispatch(notifyWithTimeout({ type: '', message: exception.response.data.error }))
     }
   }
 
@@ -78,7 +78,7 @@ const App = () => {
       const data = await blogService.getAll()
       setBlogs(data)
     } catch(exception) {
-      handleNotify('', exception.response.data.error)
+      dispatch(notifyWithTimeout({ type: '', message: exception.response.data.error }))
     }
   }
 
@@ -87,19 +87,10 @@ const App = () => {
       await blogService.remove(blog.id, user.token)
       const data = await blogService.getAll()
       setBlogs(data)
-      handleNotify('success', `Delete blog: ${blog.title}`)
+      dispatch(notifyWithTimeout({ type: 'success', message: `Delete blog: ${blog.title}` }))
     } catch(exception) {
-      handleNotify('', exception.response.data.error)
+      dispatch(notifyWithTimeout({ type: '', message: exception.response.data.error }))
     }
-  }
-
-  const handleNotify = ( type, msg ) => {
-    setNotifyMsg(msg)
-    setNotifyType(type)
-    setTimeout(() => {
-      setNotifyMsg('')
-      setNotifyType('type')
-    }, 3000)
   }
 
   const handleDesc = (sortType) => {
@@ -115,7 +106,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={ notifyMsg } type={ notifyType }/>
+      <Notification />
       {
         !user
           ? <LoginForm onLogin={ handleLogin } />
