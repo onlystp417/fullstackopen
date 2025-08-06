@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNotification, useNotificationDispatch } from './contexts/notificationContext'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -9,24 +10,37 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [desc, setDesc] = useState(true)
   const notify = useNotification()
   const dispatchNotify = useNotificationDispatch()
+  const queryClient = useQueryClient()
 
   const activeStyle = { backgroundColor: '#292e2a', color: 'white' }
 
   useEffect(() => {
     const userInfo = JSON.parse(window.localStorage.getItem('user'))
     if(!userInfo) return
-
     setUser(userInfo)
-
-    blogService
-      .getAll()
-      .then(data => { setBlogs(data) })
   }, [])
+
+  const { data: blogs = [] } = useQuery({ // data 改名稱為 blogs，並且預設值為 []
+    queryKey: ['blogs'],
+    queryFn: blogService.getAll,
+    isLoading: () => (<div> Loading Blogs ...</div>)
+  })
+
+  const createBlogMutation = useMutation({
+    mutationFn: blogService.create,
+    onSuccess: newBlog => {
+      const notes = queryClient.getQueryData(['blogs'])
+      queryClient.setQueryData(['blogs'], notes.concat(newBlog))
+      handleNotify('SUCCESS', `Blog ${newBlog.title} created`)
+    },
+    onError: exception => {
+      handleNotify('ERROR', exception.message)
+    }
+  })
 
   const blogsForUI = useMemo(() => {
     const sorted = [...blogs].sort((a, b) => {
@@ -58,25 +72,11 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreateBlog = async (newBlog) => {
-    const { title, author, url } = newBlog
-    if(!title || !author || !url)
-      return handleNotify('ERROR', 'Blog imformation are required')
-
-    try {
-      const data = await blogService.create(newBlog, user.token)
-      setBlogs(blogs.concat([data]))
-      handleNotify('SUCCESS', `Blog ${data.title} created`)
-    } catch(exception) {
-      handleNotify('ERROR', exception.response.data.error)
-    }
-  }
-
   const handleUpdateBlog = async (newBlog) => {
     try {
       await blogService.update(newBlog)
       const data = await blogService.getAll()
-      setBlogs(data)
+      // setBlogs(data)
     } catch(exception) {
       handleNotify('ERROR', exception.response.data.error)
     }
@@ -86,7 +86,7 @@ const App = () => {
     try {
       await blogService.remove(blog.id, user.token)
       const data = await blogService.getAll()
-      setBlogs(data)
+      // setBlogs(data)
       handleNotify('SUCCESS', `Delete blog: ${blog.title}`)
     } catch(exception) {
       handleNotify('ERROR', exception.response.data.error)
@@ -121,7 +121,7 @@ const App = () => {
             {user && loggedTemplate() }
             <hr />
             <Togglable buttonLable="Add blog">
-              <BlogForm onCreateBlog={ handleCreateBlog } />
+              <BlogForm onCreateBlog={ createBlogMutation.mutate } />
             </Togglable>
             <hr />
             <div style={{ display: 'flex',  justifyContent: 'space-between' }}>
