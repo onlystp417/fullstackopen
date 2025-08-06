@@ -1,12 +1,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNotificationDispatch } from '../contexts/notificationContext'
+import { useAuth } from '../contexts/authContext'
 import blogService from '../services/blogs'
 
 export function useBlogsQuery() {
+  const auth = useAuth()
   return useQuery({ // data 改名稱為 blogs，並且預設值為 []
     initialData: [],
     queryKey: ['blogs'],
     queryFn: blogService.getAll,
+    enabled: !!auth,
     isLoading: () => (<div> Loading Blogs ...</div>)
   })
 }
