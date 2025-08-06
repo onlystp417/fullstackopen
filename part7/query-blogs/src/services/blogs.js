@@ -6,7 +6,6 @@ const getAll = async () => {
 }
 
 const create = async (payload) => {
-  console.log('payload', payload)
   const { title, author, url } = payload
 
   if(!title || !author || !url)
@@ -16,13 +15,14 @@ const create = async (payload) => {
   return res.data
 }
 
-const update = async (payload, token) => {
+const update = async (payload) => {
   const res = await api.put(`blogs/${payload.id}`, payload)
   return res.data
 }
 
-const remove = async (id, token) => {
-  await api.delete(`blogs/${id}`)
+const remove = async (blog) => {
+  await api.delete(`blogs/${blog.id}`)
+  return blog
 }
 
 export default {

@@ -32,5 +32,10 @@ export function useNotification() {
 
 export function useNotificationDispatch() {
   const [, dispatchNotification] = useContext(NotificationContext)
-  return dispatchNotification
+  return (type, message) => {
+    dispatchNotification({ type, payload: message })
+    setTimeout(() => {
+      dispatchNotification({ type: 'RESET' })
+    }, 3000)
+  }
 }
