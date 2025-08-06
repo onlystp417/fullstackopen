@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNotification, useNotificationDispatch } from './contexts/notificationContext'
+import { useAuth, useAuthDispatch } from './contexts/authContext'
 import { useBlogsQuery, useBlogsMutation } from './hooks/useBlogs'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -9,19 +10,20 @@ import Notification from './components/Notification'
 import loginService from './services/login'
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const [desc, setDesc] = useState(true)
+  const auth = useAuth()
+  const authDispatch = useAuthDispatch()
   const notify = useNotification()
-  const onNotify = useNotificationDispatch()
-  const { data: blogs = [] } = useBlogsQuery()
+  const notificationDispatch = useNotificationDispatch()
+  const { data: blogs } = useBlogsQuery()
   const { createBlog, updataBlog, deleteBlog } = useBlogsMutation()
 
   const activeStyle = { backgroundColor: '#292e2a', color: 'white' }
 
   useEffect(() => {
     const userInfo = JSON.parse(window.localStorage.getItem('user'))
-    if(!userInfo) return
-    setUser(userInfo)
+    if(userInfo)
+      authDispatch({ type: 'SET', payload: userInfo })
   }, [])
 
   const blogsForUI = useMemo(() => {
@@ -30,28 +32,28 @@ const App = () => {
         ? b.likes - a.likes // desc
         : a.likes - b.likes // asc
     })
-    return sorted.map(blog => ({ ...blog, user }))
-  }, [blogs, user, desc])
+    return sorted.map(blog => ({ ...blog, user: auth }))
+  }, [blogs, auth, desc])
 
   const handleLogin = async (loginInfo) => {
     const { password, userName } = loginInfo
 
     if(!password || !userName)
-      onNotify('ERROR', 'User name and Password required')
+      notificationDispatch('ERROR', 'User name and Password required')
 
     try {
       const data = await loginService.login({ password, userName })
       window.localStorage.setItem('user', JSON.stringify(data))
-      setUser(data)
-      onNotify('SUCCESS', 'Login Success')
+      authDispatch({ type: 'SET', payload: data })
+      notificationDispatch('SUCCESS', 'Login Success')
     } catch(exception) {
-      onNotify('ERROR', exception.response.data.error)
+      notificationDispatch('ERROR', exception.response.data.error)
     }
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('user')
-    setUser(null)
+    authDispatch({ type: 'RESET' })
   }
 
   const handleDesc = (sortType) => {
@@ -60,7 +62,7 @@ const App = () => {
 
   const loggedTemplate = () => (
     <p>
-      { `${user?.name} logged in ` }
+      { `${auth?.name} logged in ` }
       <button onClick={ handleLogout }>log out</button>
     </p>
   )
@@ -69,10 +71,10 @@ const App = () => {
     <div>
       <Notification message={ notify.message } type={ notify.type }/>
       {
-        !user
+        !auth
           ? <LoginForm onLogin={ handleLogin } />
           : <>
-            {user && loggedTemplate() }
+            {auth && loggedTemplate() }
             <hr />
             <Togglable buttonLable="Add blog">
               <BlogForm onCreateBlog={ createBlog.mutate } />

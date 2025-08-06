@@ -4,6 +4,7 @@ import blogService from '../services/blogs'
 
 export function useBlogsQuery() {
   return useQuery({ // data 改名稱為 blogs，並且預設值為 []
+    initialData: [],
     queryKey: ['blogs'],
     queryFn: blogService.getAll,
     isLoading: () => (<div> Loading Blogs ...</div>)
