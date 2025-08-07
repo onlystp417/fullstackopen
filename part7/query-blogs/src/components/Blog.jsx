@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router'
 import PropTypes from 'prop-types'
 
 const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
@@ -29,9 +30,9 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
   }
 
   return (
-    <div className="blog" style={{ ...dFlex, ...blogStyle }}>
+    <div className="blog" style={blogStyle}>
       <div id={ blog.id } style={{ ...dFlex, ...header }}>
-        { blog.title }
+        <Link to={`/blog/${blog.id}`} state={blog}>{ blog.title }</Link>
         <div style={dFlex}>
           <button data-testid="view-btn" onClick={ hanbleVisibility }>{ showDetail ? 'hide' : 'view' }</button>
           <button
