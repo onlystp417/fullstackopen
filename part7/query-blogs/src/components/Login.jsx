@@ -1,15 +1,20 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useLogin } from '../contexts/authContext'
+import { useNavigate } from 'react-router'
 
-const LoginForm = ({ onLogin }) => {
+const Login = () => {
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
+  const login = useLogin()
 
   const handleLogin = e => {
     e.preventDefault()
-    onLogin({ password, userName })
+    login({ password, userName })
     setUserName('')
     setPassword('')
+    navigate('/')
   }
 
   return (
@@ -38,8 +43,4 @@ const LoginForm = ({ onLogin }) => {
   )
 }
 
-LoginForm.propTypes = {
-  onLogin: PropTypes.func.isRequired
-}
-
-export default LoginForm
+export default Login

@@ -3,7 +3,6 @@ import { useUsers } from '../hooks/useUsers'
 
 const Users = () => {
   const users = useUsers()
-  console.log('users', users)
 
   return (
     <>
@@ -18,7 +17,11 @@ const Users = () => {
         <tbody>
           {users.map(user => (
             <tr key={user.id}>
-              <td scope="row"><Link to="/">{ user.name }</Link></td>
+              <td scope="row">
+                <Link to={{ pathname: `/user/${user.id}`  }} state={user}>
+                  { user.name }
+                </Link>
+              </td>
               <td>{ user.blogs.length }</td>
             </tr>
           ))}

@@ -5,8 +5,9 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
   const [showDetail, setShowDetail] = useState(false)
   const hide = { display : 'none' }
   const show = { display: 'block' }
+  const dFlex= { display: 'flex', justifyContent: 'space-between' }
   const blogStyle = { border: 'solid #a4bfab', padding: '10px', margin: '0 0 5px 0' }
-  const header = { display: 'flex', justifyContent: 'space-between', width: '600px' }
+  const header = { width: '600px' }
   const content = { backgroundColor: '#bed2c3ff', padding: '15px', margin: '5px 0' }
   const likeStyle= { border: 'none', backgroundColor: 'inherit', marginLeft: '5px', cursor: 'pointer' }
 
@@ -28,10 +29,10 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
   }
 
   return (
-    <div className="blog" style={ blogStyle }>
-      <div id={ blog.id } style={ header }>
+    <div className="blog" style={{ ...dFlex, ...blogStyle }}>
+      <div id={ blog.id } style={{ ...dFlex, ...header }}>
         { blog.title }
-        <div>
+        <div style={dFlex}>
           <button data-testid="view-btn" onClick={ hanbleVisibility }>{ showDetail ? 'hide' : 'view' }</button>
           <button
             data-testid="delete-btn"
