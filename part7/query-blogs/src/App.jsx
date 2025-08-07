@@ -2,11 +2,13 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNotification } from './contexts/notificationContext'
 import { useAuth, useAuthDispatch, useLogin, useLogout } from './contexts/authContext'
 import { useBlogsQuery, useBlogsMutation } from './hooks/useBlogs'
+import { Outlet } from 'react-router'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
+import Menu from './components/Menu'
 
 const App = () => {
   const [desc, setDesc] = useState(true)
@@ -17,7 +19,6 @@ const App = () => {
   const notify = useNotification()
   const { data: blogs } = useBlogsQuery()
   const { createBlog, updataBlog, deleteBlog } = useBlogsMutation()
-
   const activeStyle = { backgroundColor: '#292e2a', color: 'white' }
 
   useEffect(() => {
@@ -50,6 +51,7 @@ const App = () => {
   return (
     <div>
       <Notification message={ notify.message } type={ notify.type }/>
+      <Menu />
       {
         !auth
           ? <LoginForm onLogin={ e => login(e) } />
@@ -75,6 +77,7 @@ const App = () => {
                 onRemoveBlog={ deleteBlog.mutate }
               />) }
             </div>
+            <Outlet />
           </>
       }
     </div>
