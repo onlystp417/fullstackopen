@@ -5,12 +5,31 @@ import blogService from '../services/blogs'
 
 export function useBlogsQuery() {
   const auth = useAuth()
-  return useQuery({ // data 改名稱為 blogs，並且預設值為 []
+  return useQuery({
     initialData: [],
     queryKey: ['blogs'],
     queryFn: blogService.getAll,
     enabled: !!auth,
     isLoading: () => (<div> Loading Blogs ...</div>)
+  })
+}
+
+export function useBlogQuery(id) {
+  return useQuery({
+    initialData: {
+      title: '',
+      url: '',
+      likes: 0,
+      author: '',
+      comments: [],
+      userId: null
+    },
+    queryKey: ['blog', id],
+    // 這邊的 queryFn 預設參數是傳入物件
+    // 裡面的 queryKey 會是一個陣列，第二個參數才是 id
+    // queryFn: ({ queryKey }) => blogService.getOne(queryKey[1])
+    // 或是不接參數也可以
+    queryFn: () => blogService.getOne(id)
   })
 }
 
@@ -21,8 +40,8 @@ export function useBlogsMutation() {
   const createBlog = useMutation({
     mutationFn: blogService.create,
     onSuccess: newBlog => {
-      const notes = queryClient.getQueryData(['blogs'])
-      queryClient.setQueryData(['blogs'], notes.concat(newBlog))
+      const blogs = queryClient.getQueryData(['blogs'])
+      queryClient.setQueryData(['blogs'], blogs.concat(newBlog))
       onNotify('SUCCESS', `Blog ${newBlog.title} created`)
     },
     onError: exception => {
@@ -30,13 +49,13 @@ export function useBlogsMutation() {
     }
   })
 
-  const updataBlog = useMutation({
+  const updateBlog = useMutation({
     mutationFn: blogService.update,
     onSuccess: updatedBlog => {
-      const blogs = queryClient.getQueryData(['blogs'])
+      const blogs = queryClient.getQueryData(['blogs']) || []
       const id = updatedBlog.id
       queryClient.setQueryData(['blogs'], blogs.map(blog => blog.id === id ? updatedBlog : blog))
-      onNotify('SUCCESS', `You voted ${updatedBlog.title}`)
+      queryClient.setQueryData(['blog', id], updatedBlog)
     },
     onError: exception => {
       onNotify('ERROR', exception.message)
@@ -57,7 +76,7 @@ export function useBlogsMutation() {
 
   return {
     createBlog,
-    updataBlog,
+    updateBlog,
     deleteBlog
   }
 }

@@ -8,7 +8,7 @@ import Blog from './Blog'
 const Blogs = () => {
   const auth = useAuth()
   const { data: blogs } = useBlogsQuery()
-  const { createBlog, updataBlog, deleteBlog } = useBlogsMutation()
+  const { createBlog, updateBlog, deleteBlog } = useBlogsMutation()
   const [desc, setDesc] = useState(true)
   const activeStyle = { backgroundColor: '#292e2a', color: 'white' }
 
@@ -42,7 +42,7 @@ const Blogs = () => {
         { blogsForUI.map(blog => <Blog
           key={ blog.id }
           blog={ blog }
-          onUpdateBlog={ updataBlog.mutate }
+          onUpdateBlog={ updateBlog.mutate }
           onRemoveBlog={ deleteBlog.mutate }
         />) }
       </div>

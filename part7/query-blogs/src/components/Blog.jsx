@@ -32,7 +32,7 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
   return (
     <div className="blog" style={blogStyle}>
       <div id={ blog.id } style={{ ...dFlex, ...header }}>
-        <Link to={`/blog/${blog.id}`} state={blog}>{ blog.title }</Link>
+        <Link to={`/blog/${blog.id}`} state={blog.id}>{ blog.title }</Link>
         <div style={dFlex}>
           <button data-testid="view-btn" onClick={ hanbleVisibility }>{ showDetail ? 'hide' : 'view' }</button>
           <button

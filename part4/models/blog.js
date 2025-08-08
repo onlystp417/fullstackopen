@@ -12,6 +12,10 @@ const Blog = createBaseModel({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User' // the model name registered to mongoose
+  },
+  comments: {
+    type: Array,
+    default: []
   }
 }, 'Blog')
 

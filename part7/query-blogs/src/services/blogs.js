@@ -5,6 +5,11 @@ const getAll = async () => {
   return res.data
 }
 
+const getOne = async (id) => {
+  const res = await api.get(`/blogs/${id}`)
+  return res.data
+}
+
 const create = async (payload) => {
   const { title, author, url } = payload
 
@@ -27,6 +32,7 @@ const remove = async (blog) => {
 
 export default {
   getAll,
+  getOne,
   create,
   update,
   remove
