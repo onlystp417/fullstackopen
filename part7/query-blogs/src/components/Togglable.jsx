@@ -1,23 +1,24 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import style from '../styles/togglable.module.sass'
 
 const Togglable = ({ children, buttonLable }) => {
   const [visible, setVisibale] = useState(false)
-  const hide = { display: 'none' }
-  const show = { display: 'block' }
 
   const toggleVisibility = () => { setVisibale(!visible) }
 
   return (
-    <>
-      <div style={ visible ? hide : show }>
-        <button onClick={ toggleVisibility }>{ buttonLable }</button>
+    <div className={style.togglable}>
+      <div>
+        <button onClick={ toggleVisibility }>
+          { visible ? 'Cancle' : buttonLable  }
+        </button>
       </div>
-      <div style={ visible ? show : hide }>
+      <div className={clsx(!visible && 'hide')}>
         { children }
-        <button onClick={ toggleVisibility }>Cancle</button>
       </div>
-    </>
+    </div>
   )
 }
 

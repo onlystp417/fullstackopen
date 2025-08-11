@@ -31,7 +31,7 @@ const Blogs = () => {
         <BlogForm onCreateBlog={ createBlog.mutate } />
       </Togglable>
       <hr />
-      <div style={{ display: 'flex',  justifyContent: 'space-between' }}>
+      <div className="d-flex-content">
         <h2>Blogs</h2>
         <div>
           <button onClick={ () => handleDesc('desc') } style={ desc ? activeStyle : null }>▼</button>

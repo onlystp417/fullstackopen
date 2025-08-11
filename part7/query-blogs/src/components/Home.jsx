@@ -29,7 +29,9 @@ const Home = () => {
     <div>
       <Notification message={ notify.message } type={ notify.type }/>
       <Header logout={ handleLogout } auth={ auth } />
-      <Outlet />
+      <div className="container">
+        <Outlet />
+      </div>
     </div>
   )
 }

@@ -1,18 +1,13 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
 import PropTypes from 'prop-types'
+import style from '../styles/blog.module.sass'
+import clsx from 'clsx'
 
 const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
-  const [showDetail, setShowDetail] = useState(false)
-  const hide = { display : 'none' }
-  const show = { display: 'block' }
-  const dFlex= { display: 'flex', justifyContent: 'space-between' }
-  const blogStyle = { border: 'solid #a4bfab', padding: '10px', margin: '0 0 5px 0' }
-  const header = { width: '600px' }
-  const content = { backgroundColor: '#bed2c3ff', padding: '15px', margin: '5px 0' }
-  const likeStyle= { border: 'none', backgroundColor: 'inherit', marginLeft: '5px', cursor: 'pointer' }
+  const [hideDetail, setHidedetail] = useState(true)
 
-  const hanbleVisibility = () => { setShowDetail(!showDetail) }
+  const hanbleVisibility = () => { setHidedetail(!hideDetail) }
 
   const handleLike = () => {
     const updateBlog = { ...blog, likes: blog.likes + 1 }
@@ -30,22 +25,24 @@ const Blog = ({ blog, onUpdateBlog, onRemoveBlog }) => {
   }
 
   return (
-    <div className="blog" style={blogStyle}>
-      <div id={ blog.id } style={{ ...dFlex, ...header }}>
+    <div className={style.blog}>
+      <div id={ blog.id } className={style.header}>
         <Link to={`/blog/${blog.id}`} state={blog.id}>{ blog.title }</Link>
-        <div style={dFlex}>
-          <button data-testid="view-btn" onClick={ hanbleVisibility }>{ showDetail ? 'hide' : 'view' }</button>
+        <div className="d-flex-content">
+          <button data-testid="view-btn" onClick={ hanbleVisibility }>
+            { hideDetail ? 'view' : 'hide' }
+          </button>
           <button
             data-testid="delete-btn"
-            style={{ ...(isDeleteBtnVisible ? show : hide), marginLeft: '10px' }}
+            className={clsx(!isDeleteBtnVisible && 'hide')}
             onClick={ handleRemove }>🗑️</button>
         </div>
       </div>
-      <ul data-testid="detail" style={{ ...(showDetail ? show : hide), ...content }}>
+      <ul data-testid="detail" className={clsx(hideDetail && 'hide', style.detail)}>
         <li>Author: { blog.author }</li>
         <li>
           Likes: { blog.likes }
-          <button data-testid="likes-btn" style={ likeStyle } onClick={ handleLike }>👍</button>
+          <button data-testid="likes-btn" onClick={ handleLike }>👍</button>
         </li>
         <li>URL: { blog.url }</li>
         <p>{ blog.user.name }</p>

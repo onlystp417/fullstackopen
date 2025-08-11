@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import style from '../styles/header.module.sass'
 
 const Header = ({ auth, logout }) => {
   const gutter = {
@@ -11,14 +12,14 @@ const Header = ({ auth, logout }) => {
   }
 
   return (
-    <header>
-      <div>
-        <Link style={gutter} to="/">Home</Link>
-        <Link style={gutter} to="/users">Users</Link>
+    <header className={style.header}>
+      <div className={style.menu}>
+        <Link to="/">Home</Link>
+        <Link to="/users">Users</Link>
       </div>
-      <p style={dFlex}>
+      <p>
         { `${auth?.name} logged in ` }
-        <button onClick={ logout }>log out</button>
+        <button onClick={ logout }>Logout</button>
       </p>
     </header>
   )
