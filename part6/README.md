@@ -1,4 +1,4 @@
-# Programming a server with NodeJS and Express
+# Advanced state management
 
 ## Info
 This [section](https://fullstackopen.com/en/part6) introduces state management tools. Redux and Redux Toolkit are typically used for managing client-side state in large projects, while useReducer and Context are suitable for smaller ones. React Query is used for managing server-side state.

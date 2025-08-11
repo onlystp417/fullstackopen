@@ -1,4 +1,4 @@
-# Programming a server with NodeJS and Express
+# Testing React Apps
 
 ## Info
 This [section](https://fullstackopen.com/en/part5) introduces the frontend login feature, blog CRUD via RESTful API, and testing with Vitest (integration via jsdom) and Playwright (E2E).

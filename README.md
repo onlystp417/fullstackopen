@@ -53,3 +53,11 @@ View [Exercise](./part6)
 3. Communicating with server in a Redux application
 4. React Query, useReducer and the context
 
+### Part 7 - React router, custom hooks, styling app with CSS and webpack
+View [Exercise](./part7)
+1. React Router
+2. Custom hooks
+3. More about styles
+4. Webpack
+5. Class components, Miscellaneous
+
