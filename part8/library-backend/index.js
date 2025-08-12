@@ -1,5 +1,6 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
+const { v4: uuidv4 } = require('uuid')
 
 let authors = [
   {
@@ -111,6 +112,15 @@ const typeDefs = `
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
+
+  type Mutation {
+    addBook(
+      title: String!
+      published: Int!
+      author: String!
+      genres: [String!]!
+    ): Book
+  }
 `
 
 const resolvers = {
@@ -140,6 +150,21 @@ const resolvers = {
         bookCount
       }
     })
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      const authorIsSaved = authors.findIndex(author => author.name === args.author)
+      console.log(authorIsSaved)
+      if(authorIsSaved < 0) {
+        authors.push({
+          name: args.author,
+          id: uuidv4()
+        })
+      }
+      const newBook = { ...args, id: uuidv4() }
+      books.push(newBook)
+      return newBook
+    }
   }
 }
 
