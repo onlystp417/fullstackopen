@@ -90,10 +90,11 @@ let books = [
 */
 
 const typeDefs = `
-  type Auther {
+  type Author {
     name: String!
     id: ID!
     born: Int
+    bookCount: Int!
   }
 
   type Book {
@@ -108,6 +109,7 @@ const typeDefs = `
     authorCount: Int!
     bookCount: Int!
     allBooks: [Book!]!
+    allAuthors: [Author!]!
   }
 `
 
@@ -120,7 +122,18 @@ const resolvers = {
       author,
       published,
       genres
-    }))
+    })),
+    allAuthors: () => authors.map(author => {
+      let bookCount = 0
+      books.forEach(book => {
+        if(book.author === author.name)
+          bookCount += 1
+      })
+      return {
+        name: author.name,
+        bookCount
+      }
+    })
   }
 }
 
