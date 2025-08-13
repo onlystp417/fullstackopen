@@ -120,6 +120,10 @@ const typeDefs = `
       author: String!
       genres: [String!]!
     ): Book
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
   }
 `
 
@@ -146,6 +150,7 @@ const resolvers = {
           bookCount += 1
       })
       return {
+        ...author,
         name: author.name,
         bookCount
       }
@@ -154,7 +159,6 @@ const resolvers = {
   Mutation: {
     addBook: (root, args) => {
       const authorIsSaved = authors.findIndex(author => author.name === args.author)
-      console.log(authorIsSaved)
       if(authorIsSaved < 0) {
         authors.push({
           name: args.author,
@@ -164,6 +168,16 @@ const resolvers = {
       const newBook = { ...args, id: uuidv4() }
       books.push(newBook)
       return newBook
+    },
+    editAuthor: (root, args) => {
+      const authorToEdit = authors.find(author => author.name === args.name)
+      if(!authorToEdit) return null
+      authorToEdit.born = args.setBornTo
+      authors = authors.map(author => author.name === args.name
+        ? authorToEdit
+        :author
+      )
+      return authorToEdit
     }
   }
 }
