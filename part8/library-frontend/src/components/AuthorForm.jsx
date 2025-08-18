@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { UPDATE_AUTHOR, ALL_AUTHORS } from '../schema'
 
-const AuthorForm = () => {
+const AuthorForm = ({ authors }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState(null)
 
@@ -27,12 +28,13 @@ const AuthorForm = () => {
       <h2>Set Birthyear</h2>
       <form onSubmit={ submitAuthor }>
         <div>
-          <label htmlFor="name">Name: </label>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={({ target }) => setName(target.value)} />
+          <label htmlFor="name">Author: </label>
+          <select name="name" id="name" onChange={({ target }) => setName(target.value)}>
+            <option value="">--Choose an author--</option>
+            {authors.map(author => (
+              <option value={author.name} key={author.id}>{ author.name }</option>
+            ))}
+          </select>
         </div>
         <div>
           <label htmlFor="born">Born: </label>
