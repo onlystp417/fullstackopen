@@ -9,7 +9,7 @@ const schema = `
   type Book {
     title: String!
     published: Int!
-    author: String!
+    author: Author!
     id: ID!
     genres: [String!]!
   }
@@ -17,7 +17,7 @@ const schema = `
   type Query {
     authorCount: Int!
     bookCount: Int!
-    allBooks(author: String, genre: String): [Book!]!
+    allBooks(author: ID, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
 
@@ -28,8 +28,9 @@ const schema = `
       author: String!
       genres: [String!]!
     ): Book
+
     editAuthor(
-      name: String!
+      id: ID!
       born: Int!
     ): Author
   }

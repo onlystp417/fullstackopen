@@ -1,29 +1,30 @@
+const Book = require('../models/Book')
+const Author = require('../models/Author')
 
-const { v4: uuidv4 } = require('uuid')
-let { books, authors } = require('../mockDB')
-
-function addBook (root, args) {
-  const authorIsSaved = authors.findIndex(author => author.name === args.author)
-  if(authorIsSaved < 0) {
-    authors.push({
-      name: args.author,
-      id: uuidv4()
-    })
+async function addBook (root, args) {
+  let author = await Author.findOne({ name: args.author })
+  if(!author) {
+    author = await Author.create({ name: args.author })
   }
-  const newBook = { ...args, id: uuidv4() }
-  books.push(newBook)
-  return newBook
+
+  const newBook = await Book.create({
+    ...args,
+    author: author.id
+  })
+
+  return {
+    ...newBook.toJSON(),
+    author: author.toJSON()
+  }
 }
 
-function editAuthor (root, args) {
-  const authorToEdit = authors.find(author => author.name === args.name)
-  if(!authorToEdit) return null
-  authorToEdit.born = args.born
-  authors = authors.map(author => author.name === args.name
-    ? authorToEdit
-    : author
+async function editAuthor (root, args) {
+  const editedAuthor = await Author.findByIdAndUpdate(
+    args.id,
+    { born: args.born },
+    { new: true }
   )
-  return authorToEdit
+  return editedAuthor
 }
 
 module.exports = {
