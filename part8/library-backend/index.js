@@ -1,4 +1,4 @@
-import server from './controllers'
+const server = require('./api')
 const mongoose = require('mongoose')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 

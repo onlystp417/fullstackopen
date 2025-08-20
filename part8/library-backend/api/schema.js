@@ -1,4 +1,4 @@
-const typeDefs = `
+const schema = `
   type Author {
     name: String!
     id: ID!
@@ -35,4 +35,4 @@ const typeDefs = `
   }
 `
 
-export default typeDefs
+module.exports = schema
