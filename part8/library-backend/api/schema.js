@@ -1,4 +1,14 @@
 const schema = `
+  type User {
+    username: String!
+    favoriteGenre: String!
+    id: ID!
+  }
+
+  type Token {
+    value: String!
+  }
+
   type Author {
     name: String!
     id: ID!
@@ -19,9 +29,21 @@ const schema = `
     bookCount: Int!
     allBooks(author: ID, genre: String): [Book!]!
     allAuthors: [Author!]!
+    me: User
   }
 
   type Mutation {
+    createUser(
+      username: String!
+      favoriteGenre: String!
+      password: String!
+    ): User
+
+    login(
+      username: String!
+      password: String!
+    ): Token
+
     addBook(
       title: String!
       published: Int!

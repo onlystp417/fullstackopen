@@ -1,6 +1,8 @@
 const Book = require('../models/Book')
 const Author = require('../models/Author')
+const User = require('../models/User')
 const { GraphQLError } = require('graphql')
+const jwt = require('jsonwebtoken')
 
 async function addBook (root, args) {
   let author = await Author.findOne({ name: args.author })
@@ -54,7 +56,57 @@ async function editAuthor (root, args) {
   }
 }
 
+async function createUser (root, args) {
+  const { username, favoriteGenre, password } = args
+  try {
+    const newUser = await User.create({
+      username,
+      favoriteGenre,
+      password
+    })
+    return newUser
+  } catch(error) {
+    throw new GraphQLError('Creating user faild', {
+      extensions: {
+        code: 'BAD_INPUT',
+        error: error.message
+      }
+    })
+  }
+}
+
+async function login (root, args) {
+  const { username, password } = args
+
+  try {
+    const user = await User.findOne({ username })
+
+    if(!user && user.password !== password) {
+      throw new Error('Username or password incorrect')
+    }
+
+    const userForToken = {
+      username,
+      id: user.id
+    }
+    const token = jwt.sign(userForToken, process.env.SECRET)
+    return { value: token }
+  } catch(error) {
+    throw new GraphQLError('Login faild', {
+      extensions: {
+        code: 'BAD_AUTH',
+        error: error.message
+      }
+    })
+  }
+
+
+
+}
+
 module.exports = {
   addBook,
-  editAuthor
+  editAuthor,
+  createUser,
+  login
 }
