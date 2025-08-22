@@ -46,12 +46,13 @@ async function allAuthors () {
     // 階段 2: 選擇需要回傳的欄位並計算書籍數量
     {
       $project: {
+        id: '$_id',
         name: '$name', // 保留作者的名稱
         born: '$born', // 保留作者的出生年份
         bookCount: { $size: '$authoredBooks' }, // 計算 authoredBooks 陣列的大小
       },
     },
-  ]);
+  ])
 
   return authorsWithBookCount;
 }
