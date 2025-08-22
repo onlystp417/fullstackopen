@@ -5,7 +5,7 @@ query {
   me {
     id
     username
-    token
+    favoriteGenre
   }
 }
 `
