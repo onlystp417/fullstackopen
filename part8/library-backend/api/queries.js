@@ -57,9 +57,14 @@ async function allAuthors () {
   return authorsWithBookCount;
 }
 
+async function me(root, args, context) {
+  return context.currentUser
+}
+
 module.exports = {
   authorCount,
   bookCount,
   allBooks,
-  allAuthors
+  allAuthors,
+  me
 }

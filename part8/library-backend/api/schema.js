@@ -6,7 +6,7 @@ const schema = `
   }
 
   type Token {
-    value: String!
+    token: String!
   }
 
   type Author {

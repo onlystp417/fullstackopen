@@ -4,7 +4,9 @@ const User = require('../models/User')
 const { GraphQLError } = require('graphql')
 const jwt = require('jsonwebtoken')
 
-async function addBook (root, args) {
+async function addBook (root, args, { currentUser }) {
+  if(!currentUser) throw new GraphQLError('Unauthorized')
+
   let author = await Author.findOne({ name: args.author })
   if(!author) {
     try {
@@ -18,7 +20,6 @@ async function addBook (root, args) {
       })
     }
   }
-
   try {
     const newBook = await Book.create({
       ...args,
@@ -38,8 +39,10 @@ async function addBook (root, args) {
   }
 }
 
-async function editAuthor (root, args) {
+async function editAuthor (root, args, { currentUser }) {
   try {
+    if(!currentUser) throw new GraphQLError('Unauthorized')
+
     const editedAuthor = await Author.findByIdAndUpdate(
       args.id,
       { born: args.born },
@@ -90,7 +93,7 @@ async function login (root, args) {
       id: user.id
     }
     const token = jwt.sign(userForToken, process.env.SECRET)
-    return { value: token }
+    return { token }
   } catch(error) {
     throw new GraphQLError('Login faild', {
       extensions: {

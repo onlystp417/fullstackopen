@@ -4,8 +4,8 @@ import { useMutation } from '@apollo/client'
 import { UPDATE_AUTHOR, ALL_AUTHORS } from '../schema'
 
 const AuthorForm = ({ authors }) => {
-  const [name, setName] = useState('')
-  const [born, setBorn] = useState(null)
+  const [id, setId] = useState('')
+  const [born, setBorn] = useState('')
 
   const [ updateAuthor ] = useMutation(UPDATE_AUTHOR, {
     refetchQueries: [
@@ -13,14 +13,14 @@ const AuthorForm = ({ authors }) => {
     ]
   })
 
-  const submitAuthor = e => {
+  const submitAuthor = async e => {
     e.preventDefault()
-    const { data } = updateAuthor({ variables: { name, born } })
+    const { data } = await updateAuthor({ variables: { id, born } })
     if(!data.editAuthor) {
       console.log(new Error('Author Not Found'))
     }
-    setName('')
-    setBorn(null)
+    setId('')
+    setBorn('')
   }
 
   return (
@@ -29,10 +29,10 @@ const AuthorForm = ({ authors }) => {
       <form onSubmit={ submitAuthor }>
         <div>
           <label htmlFor="name">Author: </label>
-          <select name="name" id="name" onChange={({ target }) => setName(target.value)}>
+          <select name="name" id="name" onChange={({ target }) => setId(target.value)}>
             <option value="">--Choose an author--</option>
             {authors.map(author => (
-              <option value={author.name} key={author.id}>{ author.name }</option>
+              <option value={author.id} key={author.id}>{ author.name }</option>
             ))}
           </select>
         </div>

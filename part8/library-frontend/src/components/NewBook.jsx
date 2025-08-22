@@ -5,7 +5,7 @@ import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../schema'
 const initialBook = {
     title: '',
     author: '',
-    published: null,
+    published: '',
     genre: '',
     genres: [],
   }
@@ -25,8 +25,7 @@ const NewBook = (props) => {
 
   const submit = async (event) => {
     event.preventDefault()
-    console.log('add book...')
-    createBook({ variables: { ...newBook} })
+    createBook({ variables: { ...newBook } })
     setNewBook(initialBook)
   }
 
