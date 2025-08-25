@@ -32,6 +32,16 @@ async function allBooks (root, args) {
   )
 }
 
+async function allGenres () {
+  const allBooks = await Book.find({})
+  return allBooks.reduce((accu, curr) => {
+      curr.genres.forEach(currGenre => {
+        if(!accu.includes(currGenre)) accu.push(currGenre)
+      })
+      return accu
+    }, [])
+}
+
 async function allAuthors () {
   const authorsWithBookCount = await Author.aggregate([
     // 階段 1: 聯結 books 集合
@@ -66,5 +76,6 @@ module.exports = {
   bookCount,
   allBooks,
   allAuthors,
-  me
+  me,
+  allGenres
 }

@@ -29,6 +29,7 @@ const schema = `
     bookCount: Int!
     allBooks(author: ID, genre: String): [Book!]!
     allAuthors: [Author!]!
+    allGenres: [String!]!
     me: User
   }
 

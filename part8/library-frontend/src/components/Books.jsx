@@ -1,36 +1,11 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../schema'
+import BookTable from './BookTalble'
 
 const Books = (props) => {
-  const { data, loading, error } = useQuery(ALL_BOOKS)
   const [ genre, setGenre ] = useState('')
-  const [ books, setBooks ] = useState([])
-  const [ genres, setGenres ] = useState([])
-
-  useEffect(() => {
-    if(!data) return
-    const allGenres = data.allBooks.reduce((accu, curr) => {
-      curr.genres.forEach(currGenre => {
-        if(!accu.includes(currGenre)) accu.push(currGenre)
-      })
-      return accu
-    }, [])
-    setGenres(allGenres)
-  }, [data])
-
-  useMemo(() => {
-    if(!data) return
-    let filteredBooks
-    if (!genre) {
-      filteredBooks = data.allBooks
-    } else {
-      filteredBooks = data.allBooks.filter(book => {
-        return book.genres.find(currGenre => currGenre === genre)
-      })
-    }
-    setBooks(filteredBooks)
-  }, [data, genre])
+  const { data, loading, error } = useQuery(ALL_BOOKS, { variables: { genre } })
 
   if (!props.show) {
     return null
@@ -46,12 +21,12 @@ const Books = (props) => {
 
       <span>Filtered by: </span>
 
-      <select name="genre" id="genre" onChange={e => setGenre(e.target.value)}>
+      <select name="genre" id="genre" value={genre} onChange={e => setGenre(e.target.value)}>
         <option
           value=""
           key=""
           onChange={e => setGenre(e.target.value)}>All</option>
-        {genres.map(genre => (
+        {data.allGenres.map(genre => (
           <option
             value={genre}
             key={genre}
@@ -59,22 +34,7 @@ const Books = (props) => {
         ))}
       </select>
 
-      <table>
-        <tbody>
-          <tr>
-            <th>title</th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {books.map((a) => (
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <BookTable books={data.allBooks} />
     </div>
   )
 }
