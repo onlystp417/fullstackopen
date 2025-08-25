@@ -61,3 +61,10 @@ View [Exercise](./part7)
 4. Webpack
 5. Class components, Miscellaneous
 
+### Part 8 - GraphQL
+View [Exercise](./part8)
+1. GraphQL-server
+2. React and GraphQL
+3. Database and user administration
+4. Login and updating the cache
+5. Fragments and subscriptions
