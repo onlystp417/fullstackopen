@@ -1,17 +1,17 @@
-import { useState, useMemo } from "react"
+import { useEffect } from "react"
 import { ME, ALL_BOOKS } from "../schema"
-import { useQuery } from "@apollo/client"
+import { useQuery, useLazyQuery } from "@apollo/client"
 
 const Recommendation = props => {
-  const [recommendation, setRecommendation] = useState([])
   const { data: meData, loading: meLoading, error: meError } = useQuery(ME)
-  const { data: booksData, loading: booksLoading, error: booksError } = useQuery(ALL_BOOKS)
+  const [ getBooks, { data: booksData, loading: booksLoading, error: booksError }] = useLazyQuery(ALL_BOOKS)
 
-  useMemo(() => {
-    if(!booksData) return
-    const filtered = booksData.allBooks.filter(book => book.genres.includes(meData.me.favoriteGenre))
-    setRecommendation(filtered)
-  }, [booksData, meData])
+  useEffect(() => {
+    if(!meData) return
+    getBooks({
+      variables: { genre: meData.me.favoriteGenre }
+    })
+  }, [meData])
 
   if (!props.show) {
   return null
@@ -31,7 +31,7 @@ const Recommendation = props => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {recommendation.map((a) => (
+          {booksData.allBooks.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
