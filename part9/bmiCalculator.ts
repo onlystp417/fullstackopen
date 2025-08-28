@@ -1,4 +1,4 @@
-function bmiCalculator (height: number, weight: number): string {
+export function bmiCalculator (height: number, weight: number): string {
   const heightInMeter = height / 100
   const bmi = weight / (heightInMeter * heightInMeter)
 
@@ -19,6 +19,3 @@ function bmiCalculator (height: number, weight: number): string {
   else
     return 'Obese (Class III)'
 }
-
-const category = bmiCalculator(159, 54)
-console.log(category)
