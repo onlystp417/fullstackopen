@@ -10,7 +10,7 @@ interface ExerciseResult {
   average: number
 }
 
-function calculateExercises (records: number[], target: number): ExerciseResult {
+export function calculateExercises (records: number[], target: number): ExerciseResult {
   if (target <= 0)
     throw new Error('Target must be a positive number.')
 
@@ -53,5 +53,3 @@ function calculateExercises (records: number[], target: number): ExerciseResult 
     average
   }
 }
-
-console.log(calculateExercises([], 2))
