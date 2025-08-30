@@ -2,6 +2,7 @@ import express from 'express'
 import type { Request, Response } from 'express'
 import cors from 'cors'
 import diagnoteRouter from './routes/diagnotes'
+import patientRouter from './routes/patients'
     
 
 const app = express();
@@ -17,6 +18,7 @@ app.get('/api/ping', (_req: Request, res: Response) => {
 })
 
 app.use('/api/diagnotes', diagnoteRouter)
+app.use('/api/patients', patientRouter)
 
 const PORT = 3003
 
