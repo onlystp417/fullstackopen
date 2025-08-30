@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./build/index.js",
     "tsc": "tsc",
-    "dev": "ts-node-dev index.ts",
+    "dev": "ts-node-dev ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jin",
@@ -23,6 +23,7 @@
     "@types/eslint__js": "^9.14.0",
     "@types/express": "^5.0.3",
     "eslint": "^9.34.0",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.41.0"
   }
