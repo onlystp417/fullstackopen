@@ -5,3 +5,16 @@ content-type: application/json
 
 GET http://localhost:3003/api/patients
 content-type: application/json
+
+###
+
+POST http://localhost:3003/api/patients
+content-type: application/json
+
+{
+    "name": "Henry Chen",
+    "dateOfBirth": "1967/12/12",
+    "ssn": "32967398",
+    "gender": "male",
+    "occupation": ""
+}
