@@ -1,3 +1,4 @@
+import { z } from 'zod'
 export interface Diagnote {
   code: string
   name: string
@@ -10,15 +11,18 @@ export enum Gender {
   Other = 'other'
 }
 
-export interface Patient {
+export const PatientSchema = z.object({
+  name: z.string(),
+  dateOfBirth: z.string(),
+  ssn: z.string(),
+  gender: z.enum(Gender),
+  occupation: z.string(),
+})
+
+export type NewPatient = z.infer<typeof PatientSchema>
+
+export interface Patient extends NewPatient {
   id: string
-  name: string
-  dateOfBirth: string
-  ssn: string
-  gender: Gender
-  occupation: string
 }
 
 export type NonSensitivePatient = Omit<Patient, 'ssn'>
-
-export type NewPatient = Omit<Patient, 'id'>
