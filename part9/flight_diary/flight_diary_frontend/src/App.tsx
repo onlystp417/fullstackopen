@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Diary from "./components/Diary"
+import DiaryForm from './components/DiaryForm'
 import type { DiaryInterface } from './types'
 import { getDiaries } from './services/diaries'
 
@@ -13,6 +14,7 @@ function App() {
   return (
     <>
       <h1>Flight Diaries</h1>
+      <DiaryForm />
       {
         diaries.map(diary => (
           <Diary diary={ diary } />
