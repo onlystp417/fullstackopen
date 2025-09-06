@@ -49,9 +49,10 @@ const DiaryForm = (props: DiaryFromProps) => {
     <>
       <h2>Add New Entry</h2>
       <form onSubmit={handleSubmit}>
+        
         <div>
           <label htmlFor="date">Date: </label>
-          <input type="text" name="date" id="date" value={date} onChange={ e => setDate(e.target.value)} />
+          <input type="date" id="date" value={weather} onChange={ e => setDate(e.target.value) } />
         </div>
           <label htmlFor="weather">Weather: </label>
           <select
