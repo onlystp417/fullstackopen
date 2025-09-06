@@ -11,10 +11,14 @@ function App() {
     getDiaries().then(data => setDiaries(data))
   }, [])
 
+  function refetchDiaries () {
+    getDiaries().then(data => setDiaries(data))
+  }
+
   return (
     <>
       <h1>Flight Diaries</h1>
-      <DiaryForm />
+      <DiaryForm refecth={refetchDiaries} />
       {
         diaries.map(diary => (
           <Diary diary={ diary } />
