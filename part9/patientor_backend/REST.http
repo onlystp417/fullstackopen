@@ -18,3 +18,16 @@ content-type: application/json
     "gender": "male",
     "occupation": ""
 }
+
+###
+
+GET http://localhost:3003/api/patients/d2773822-f723-11e9-8f0b-362b9e155667
+content-type: application/json
+
+{
+    "name": "Henry Chen",
+    "dateOfBirth": "1967/12/12",
+    "ssn": "32967398",
+    "gender": "male",
+    "occupation": ""
+}

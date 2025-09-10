@@ -11,6 +11,8 @@ export enum Gender {
   Other = 'other'
 }
 
+export interface Entry {}
+
 export const PatientSchema = z.object({
   name: z.string(),
   dateOfBirth: z.string(),
@@ -22,7 +24,8 @@ export const PatientSchema = z.object({
 export type NewPatient = z.infer<typeof PatientSchema>
 
 export interface Patient extends NewPatient {
-  id: string
+  id: string,
+  entries?: Entry[]
 }
 
-export type NonSensitivePatient = Omit<Patient, 'ssn'>
+export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>
